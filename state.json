@@ -1,0 +1,62 @@
+{
+ "cash": 50000.0,
+ "peak_equity": 50000.0,
+ "equity_history": [
+  {
+   "date": "2026-11-11",
+   "equity": 50000.0,
+   "cash": 50000.0,
+   "positions": 0,
+   "orders": 0
+  }
+ ],
+ "positions": [],
+ "orders": [
+  {
+   "id": "T0001",
+   "code": "ASX",
+   "qty": 50,
+   "limit": 65.66,
+   "stop": 63.89,
+   "target": 69.2,
+   "atr": 1.1752,
+   "sector": "Financials: Financial Services",
+   "placed": "2026-11-11",
+   "days_live": 0,
+   "thesis": "Pullback into FVG+OB zone 65.20-66.12 in price discovery; RS +16.7%",
+   "review": {
+    "debate": "BULL",
+    "debate_net": 1.35,
+    "news": "FY26 beat; no results until Feb; regulatory cost overhang known",
+    "expected_R": 0.187
+   }
+  },
+  {
+   "id": "T0002",
+   "code": "IAG",
+   "qty": 317,
+   "limit": 8.72,
+   "stop": 8.44,
+   "target": 9.28,
+   "atr": 0.1862,
+   "sector": "Financials: Insurance",
+   "placed": "2026-11-11",
+   "days_live": 0,
+   "thesis": "Pullback to EMA20 near 52-week high; RS +9.1%",
+   "review": {
+    "debate": "BULL",
+    "debate_net": 1.29,
+    "news": "New 52w high; results Feb; class action known; storm season risk",
+    "expected_R": 0.181
+   }
+  }
+ ],
+ "closed": [],
+ "cancelled": [],
+ "last_processed": "2026-11-11",
+ "halted": false,
+ "halt_reason": null,
+ "breaches": [],
+ "next_id": 3,
+ "created": "2026-11-11"
+}
