@@ -21,6 +21,7 @@ Account: $50,000 paper money · brokerage $5.50 each way ($11 round trip) · pap
 ## Entries
 11. Market filter: new trades only when the ASX 200 closes above its 50-day EMA.
 12. Stocks: 20-day turnover ≥ $2m/day, ATR ≤ 2.5% of price, price ≥ $0.50, position ≥ $2,200 (brokerage ≤ 0.5%), ≤ 20% of equity, ≤ 1% of average daily volume.
+13a. No entries in the first hour: an order can only fill from 11:00am Sydney time. A dip to the limit between 10:00 and 11:00 doesn't count, and the order stays live. Fills are checked on 5-minute prices; if those aren't available (more than 5 days old), the daily price is used and the fill is marked "unverified".
 13. Limit orders only. Cancel after 3 days unfilled, or if the stock opens > 0.5 ATR above the limit, or opens at/below the stop.
 14. No entry within 5 trading days of results; no ex-dividend date inside the holding window; no halted stocks; no pending capital raising.
 15. Cooldown: no re-entry for 5 trading days after a stop-out.

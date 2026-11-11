@@ -63,6 +63,7 @@ RULES = {
     "max_pct_avg_volume": 1.0,
     "max_order_gap_atr": 0.5,       # rule 13
     "cooldown_days": 5,             # rule 15
+    "entry_not_before": "11:00",    # rule 13a: no entries in the first hour (Sydney time)
     "index": "^AXJO",
     "index_ema": 50,                # rule 11
 }
@@ -218,29 +219,56 @@ def close_pos(s, p, date, price, reason):
     s["positions"].remove(p)
 
 
-def process_bar(s, code_bars, date, P, events):
+def intraday_fill(o, bars5):
+    """First 5-minute bar from 11:00 that trades at/below the limit. Returns (fill, time, later_bars)."""
+    late = [x for x in bars5 if x["time"] >= RULES["entry_not_before"]]
+    for i, x in enumerate(late):
+        if x["l"] <= o["limit"]:
+            return min(x["o"], o["limit"]), x["time"], late[i:]
+    return None, None, []
+
+
+def process_bar(s, code_bars, date, P, events, intraday=None):
+    intraday = intraday or {}
     # pending orders first (orders placed before `date` can fill on `date`)
     for o in list(s["orders"]):
         b = code_bars.get(o["code"], {}).get(date)
         if not b or o["placed"] >= date:
             continue
         o["days_live"] += 1
+        bars5 = intraday.get(o["code"], {}).get(date)
+        fill, ftime, after = None, None, []
         if b["o"] > o["limit"] + RULES["max_order_gap_atr"] * o["atr"]:
             o["cancel_reason"] = "opened %.3f, more than 0.5 ATR above the limit" % b["o"]
         elif b["o"] <= o["stop"]:
             o["cancel_reason"] = "opened at/below the stop, setup void"
         elif b["l"] <= o["limit"]:
-            fill = min(b["o"], o["limit"])
+            if bars5:
+                fill, ftime, after = intraday_fill(o, bars5)
+                if fill is None:
+                    events.append("NO FILL %s: limit only touched before %s" % (o["code"], RULES["entry_not_before"]))
+            else:  # no 5-minute data (older than 5 days): daily fallback, flagged
+                fill, ftime = min(b["o"], o["limit"]), "unverified"
+        if fill is not None:
             s["cash"] -= fill * o["qty"] + brk()
             p = {k: o[k] for k in ("id", "code", "qty", "stop", "target", "atr", "sector", "thesis", "review")}
-            p.update(entry=round(fill, 4), entry_date=date, init_stop=o["stop"],
+            p.update(entry=round(fill, 4), entry_date=date, entry_time=ftime, init_stop=o["stop"],
                      init_risk_per_share=round(fill - o["stop"], 4), bars_held=0, mfe=fill, mae=fill, be_moved=False)
             s["positions"].append(p)
             s["orders"].remove(o)
-            events.append("FILLED %s %d @ %.3f" % (o["code"], o["qty"], fill))
-            if b["l"] <= p["stop"]:  # touched stop on the fill day (conservative)
-                close_pos(s, p, date, p["stop"], "stop (fill day)")
-                events.append("STOPPED %s same day @ %.3f" % (p["code"], p["stop"]))
+            events.append("FILLED %s %d @ %.3f at %s" % (o["code"], o["qty"], fill, ftime))
+            # rest of the fill day: stop checked before target in each 5-minute bar (conservative)
+            seq = after if after else [b]
+            for j, x in enumerate(seq):
+                if j:  # the fill bar's high may have come before the fill
+                    p["mfe"] = max(p["mfe"], x["h"])
+                p["mae"] = min(p["mae"], x["l"])
+                if x["l"] <= p["stop"]:
+                    close_pos(s, p, date, p["stop"], "stop (fill day)")
+                    events.append("STOPPED %s same day @ %.3f" % (p["code"], p["stop"])); break
+                if after and j and x["h"] >= p["target"]:
+                    close_pos(s, p, date, p["target"], "target (fill day)")
+                    events.append("TARGET %s same day @ %.3f" % (p["code"], p["target"])); break
             continue
         elif o["days_live"] >= P["order_expiry_days"]:
             o["cancel_reason"] = "not filled in %d days" % o["days_live"]
@@ -302,13 +330,19 @@ def cmd_update(a):
     dates = [b["date"] for b in trading_dates(idx, s["last_processed"])]
     if s["last_processed"] is None:  # first run: start from the latest session, no history to replay
         dates = dates[-1:]
-    code_bars = {}
+    code_bars, intraday = {}, {}
     for c in codes:
         code_bars[c] = {b["date"]: b for b in bars_for(c)}
+    for c in {o["code"] for o in s["orders"]}:
+        try:
+            for x in C.get_bars(c, "5m", "5d"):
+                intraday.setdefault(c, {}).setdefault(x["date"], []).append(x)
+        except Exception:
+            pass
     out = []
     for d in dates:
         events = []
-        process_bar(s, code_bars, d, P, events)
+        process_bar(s, code_bars, d, P, events, intraday)
         eq = mark_to_market(s, code_bars, d)
         s["last_processed"] = d
         out.append({"date": d, "equity": round(eq, 2), "events": events})
