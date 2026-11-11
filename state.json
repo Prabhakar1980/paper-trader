@@ -213,12 +213,164 @@
      "expected_R": -0.01,
      "score": 90
     }
+   },
+   {
+    "id": "S0009",
+    "code": "FPH",
+    "qty": 16,
+    "limit": 38.49,
+    "stop": 36.15,
+    "target": 43.17,
+    "atr": 0.7865,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 40.150 leaves 0.7R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 40.150 leaves 0.7R (< 2.0R)",
+     "expected_R": 0.221,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0010",
+    "code": "BOQ",
+    "qty": 186,
+    "limit": 6.94,
+    "stop": 6.74,
+    "target": 7.34,
+    "atr": 0.1302,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 7.060 leaves 0.6R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 7.060 leaves 0.6R (< 2.0R)",
+     "expected_R": 0.105,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0011",
+    "code": "CPU",
+    "qty": 33,
+    "limit": 42.38,
+    "stop": 41.22,
+    "target": 44.7,
+    "atr": 0.7727,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 43.740 leaves 1.2R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 43.740 leaves 1.2R (< 2.0R)",
+     "expected_R": 0.161,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0012",
+    "code": "RWC",
+    "qty": 230,
+    "limit": 4.54,
+    "stop": 4.38,
+    "target": 4.86,
+    "atr": 0.1003,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 4.730 leaves 1.2R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 4.730 leaves 1.2R (< 2.0R)",
+     "expected_R": 0.106,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0013",
+    "code": "WOW",
+    "qty": 15,
+    "limit": 41.9,
+    "stop": 39.41,
+    "target": 46.88,
+    "atr": 0.8918,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "position $628 below $2200 (brokerage drag)",
+    "review": {
+     "category": "size/brokerage",
+     "why": "position $628 below $2200 (brokerage drag)",
+     "expected_R": 0.378,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0014",
+    "code": "ARG",
+    "qty": 130,
+    "limit": 9.42,
+    "stop": 9.13,
+    "target": 10.0,
+    "atr": 0.094,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 9.500 leaves 0.3R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 9.500 leaves 0.3R (< 2.0R)",
+     "expected_R": 0.055,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0015",
+    "code": "TLC",
+    "qty": 230,
+    "limit": 5.39,
+    "stop": 5.23,
+    "target": 5.71,
+    "atr": 0.1013,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 5.500 leaves 0.7R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 5.500 leaves 0.7R (< 2.0R)",
+     "expected_R": 0.023,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0016",
+    "code": "ORG",
+    "qty": 109,
+    "limit": 12.14,
+    "stop": 11.79,
+    "target": 12.84,
+    "atr": 0.2302,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 12.330 leaves 0.5R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 12.330 leaves 0.5R (< 2.0R)",
+     "expected_R": 0.044,
+     "score": 90
+    }
    }
   ],
   "positions": [],
   "closed": [],
   "cancelled": [],
-  "next_id": 9
+  "next_id": 17
  },
  "benchmark": {
   "code": "IOZ",
