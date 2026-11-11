@@ -560,7 +560,7 @@ def cmd_review(a):
             tags.append("gap-through")
         if t.get("breach"):
             tags.append("RULE BREACH")
-        if t["reason"].startswith("stop"):
+        if t["reason"].startswith(("stop", "breakeven")):
             try:
                 after = [b for b in bars_for(t["code"]) if b["date"] > t["exit_date"]][:10]
                 if any(b["h"] >= t["target"] for b in after):
