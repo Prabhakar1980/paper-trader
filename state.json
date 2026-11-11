@@ -7,7 +7,8 @@
    "equity": 50000.0,
    "cash": 50000.0,
    "positions": 0,
-   "orders": 0
+   "orders": 0,
+   "benchmark": 50000.0
   }
  ],
  "positions": [],
@@ -20,7 +21,7 @@
    "stop": 63.89,
    "target": 69.2,
    "atr": 1.1752,
-   "sector": "Financials: Financial Services",
+   "sector": "Financial Services",
    "placed": "2026-11-11",
    "days_live": 0,
    "thesis": "Pullback into FVG+OB zone 65.20-66.12 in price discovery; RS +16.7%",
@@ -34,12 +35,12 @@
   {
    "id": "T0002",
    "code": "IAG",
-   "qty": 317,
+   "qty": 306,
    "limit": 8.72,
    "stop": 8.44,
    "target": 9.28,
    "atr": 0.1862,
-   "sector": "Financials: Insurance",
+   "sector": "Insurance",
    "placed": "2026-11-11",
    "days_live": 0,
    "thesis": "Pullback to EMA20 near 52-week high; RS +9.1%",
@@ -218,5 +219,11 @@
   "closed": [],
   "cancelled": [],
   "next_id": 9
+ },
+ "benchmark": {
+  "code": "IOZ",
+  "start_date": "2026-11-11",
+  "start_price": 36.689998626708984,
+  "units": 1362.7691979143826
  }
 }

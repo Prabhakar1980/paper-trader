@@ -13,6 +13,9 @@ Follow every step in order. Paper money only. Read `RULES.md` and `lessons.md` b
 `python engine.py review`. For each trade closed since the last run, add a dated entry to `lessons.md`:
 - **Process error** if a rule or check failed (gap-through on a stock that had news pending, entry near results, a sector clash, a debate that ignored a known risk). State the fix for next time.
 - **Bad luck** if the rules were followed. Write one line and don't over-learn from it.
+- Record each verdict on the trade itself, which feeds the go-live checklist:
+  `python engine.py tag --id T0003 --process-error "..."` or `--bad-luck "..."`.
+- A **frozen** position (possible corporate action) must be checked by web search: a split or consolidation, takeover or delisting. Write what you found in lessons.md and flag it in the notification. Do not unfreeze it yourself; Prabhakar decides.
 - Use the tags: `shakeout` (stopped, then hit the original target within 10 days), `breakeven stop`, `time stop`, `gap-through`, `RULE BREACH`.
 
 **Tuning (rule 19).** Only if `tuning_allowed` is true (≥ 8 closed trades), at most one change per week, within the bounds:
@@ -27,7 +30,7 @@ Write the change to `params.json` and record the date, evidence and old → new 
 
 For each candidate in order, while slots and risk budget remain, run the asx-trader review:
 1. `news.py CODE`, plus a web search for the results date, ex-dividend date, trading halts, capital raisings and director selling. Rule 14 failure → skip.
-2. GICS industry group. A clash with a held or pending stock (rule 6) → skip.
+2. GICS industry group, from the fixed list (`--sector` choices in engine.py). A clash with a held or pending stock (rule 6) → skip.
 3. Bull/bear debate per the skill's `references/debate.md`, using the candidate's numbers. Run `debate_score.py`. Anything other than TRADE PLAN OK → skip.
    Every candidate you skip at steps 1–3, or because slots or budget ran out, MUST be logged:
    `python engine.py skip --code CODE --category <calendar|sector|debate|news|no slot|other> --reason "..."`
@@ -45,4 +48,5 @@ Mechanical rejections (resistance, size/brokerage, replay odds) and gate-shut da
 ## 5. Save and notify
 - Commit everything with the message `Daily run <date>: equity $X, day ±Y` and push to `main`.
 - Send Prabhakar a short push notification: value, today's P&L, total P&L, trades today (filled, closed, new orders), open positions, breaches, plus one line of lessons if any.
-- If the account is halted, say so at the top of the notification.
+- If the account is halted, a position is frozen, or the report shows **30-TRADE REVIEW DUE**, say so on the first line of the notification.
+- Include one line with the account against the IOZ benchmark, and the go-live score (x/7).

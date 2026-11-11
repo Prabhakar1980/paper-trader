@@ -10,7 +10,7 @@ Account: $50,000 paper money · brokerage $5.50 each way ($11 round trip) · pap
 ## Position limits (fixed)
 4. Max 3 trades at a time (open positions + pending orders).
 5. Max $100 loss per stock incl. brokerage. Total open + pending risk never above $250 (so tomorrow's worst case fits rule 1). A gap through a stop is logged as a breach.
-6. One stock per GICS industry group (e.g. one bank, one insurer, one gold miner).
+6. One stock per GICS industry group, from the fixed list of 25 in engine.py (e.g. one bank, one insurer, one Materials stock; all miners count as Materials). The engine refuses any label not on the list.
 7. After 3 losses in a row, risk is $50 per trade until the next winner.
 
 ## Stops
@@ -32,12 +32,28 @@ Account: $50,000 paper money · brokerage $5.50 each way ($11 round trip) · pap
 18. Daily review tags each closed trade as process error (a rule or check failed) or bad luck (rules followed). Lessons go in `lessons.md`, read first every run.
 19. Settings in `params.json` may change only after ≥ 8 closed trades show a pattern, within the bounds in `engine.py`, at most one change per week, each recorded in `changelog.md`. Rules 1–17 above are never changed by the system.
 20. Daily report after the close: value, today's P&L, total P&L, trades, open positions, breaches.
-21. Shadow journal: rejected candidates (by filter, gate, debate, calendar, sector or no slot) are tracked as if taken, under the same fill and exit rules, and measured in R. This shows whether each filter protects the account or just costs trades. It informs the 30-trade review only; it never changes rules automatically.
+21. Benchmark: a $50k line in the IOZ ASX 200 ETF (price only, so dividends of about 3.5% a year are left out) is tracked daily alongside the account.
+21b. Shadow journal: rejected candidates (by filter, gate, debate, calendar, sector or no slot) are tracked as if taken, under the same fill and exit rules, and measured in R. This shows whether each filter protects the account or just costs trades. It informs the 30-trade review only; it never changes rules automatically.
 22. Judge after ≥ 30 closed trades, against holding an ASX 200 ETF over the same period.
+
+## Go-live criteria (agreed in advance; all must be met before real money)
+1. At least 30 closed trades.
+2. Net P&L after brokerage is positive.
+3. Average R is positive.
+4. The account beats the $50k ASX 200 ETF line (IOZ, price only, started 11 Nov 2026 at $36.69).
+5. The drawdown halt never triggered.
+6. No rule breaches in the last 10 trades.
+7. No process errors in the last 10 trades.
+
+Meeting them doesn't mean "go big". It means a sit-down review with Prabhakar, then real money at the same $100-per-trade risk. `python engine.py golive` shows the checklist; the daily report shows the score. At 30 closed trades the report flags **30-TRADE REVIEW DUE** until `"review30_done": true` is set in state.json.
+
+## Corporate actions
+If a held stock opens more than 40% away from its previous close, or Yahoo rewrites its price history (a split or consolidation), the position is **frozen**: no exits are processed and the report flags it for manual review. Pending orders on such a stock are cancelled.
 
 ## How fills and exits are decided (no "stop first" assumption)
 - The run happens after the close, but it replays the day minute by minute using 1-minute prices (last 7 trading days) or 5-minute prices (up to 60 days). Whichever of the stop or the target was actually reached first is the exit, with its time recorded.
 - An open below the stop sells at the open (a gap). An open above the target sells at the open.
 - Only when a single minute bar touches both levels is the order estimated, using whichever level is nearer that bar's open. Such exits are tagged "estimate" in the trade record and the daily review.
 - With no intraday data at all (run missed for more than 60 days), daily prices are used and the result is tagged "daily data only".
-- Fills happen at the limit, or at the bar's open if it opened lower.
+- **Realistic fills:** a buy limit fills only if the price trades at least one tick *below* it (a touch isn't enough, because of the queue). A target sell needs a trade one tick *above* it. Fills are at the limit, or the bar's open if that's better.
+- **Stop slippage:** stops fill one tick below the stop price (or at the open on a gap). Position sizing includes this tick, so the $100 cap holds.

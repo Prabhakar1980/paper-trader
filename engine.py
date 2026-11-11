@@ -65,8 +65,21 @@ RULES = {
     "cooldown_days": 5,             # rule 15
     "entry_not_before": "11:00",    # rule 13a: no entries in the first hour (Sydney time)
     "index": "^AXJO",
+    "benchmark": "IOZ",             # rule 22: iShares ASX 200 ETF, price only
+    "corp_action_jump": 0.40,       # overnight move that flags a possible split/consolidation
     "index_ema": 50,                # rule 11
 }
+
+GICS_GROUPS = [
+    "Energy", "Materials", "Capital Goods", "Commercial & Professional Services", "Transportation",
+    "Automobiles & Components", "Consumer Durables & Apparel", "Consumer Services",
+    "Consumer Discretionary Distribution & Retail", "Consumer Staples Distribution & Retail",
+    "Food, Beverage & Tobacco", "Household & Personal Products", "Health Care Equipment & Services",
+    "Pharmaceuticals, Biotechnology & Life Sciences", "Banks", "Financial Services", "Insurance",
+    "Software & Services", "Technology Hardware & Equipment", "Semiconductors & Semiconductor Equipment",
+    "Telecommunication Services", "Media & Entertainment", "Utilities", "Equity REITs",
+    "Real Estate Management & Development", "ETF / LIC (index exposure)",
+]  # rule 6: one stock per GICS industry group
 
 # ---------- tunable settings with hard bounds (rule 17) ----------
 PARAM_BOUNDS = {
@@ -151,11 +164,11 @@ def loss_streak(s):
 
 def trade_risk(qty, entry, stop):
     """Dollars lost if the stop is hit, incl. both brokerage legs (0 if stop at/above entry+costs)."""
-    return max(0.0, (entry - stop) * qty + 2 * brk())
+    return max(0.0, (entry - stop + C.tick_size(stop)) * qty + 2 * brk())  # incl. 1 tick stop slippage
 
 
 def open_risk(s):
-    r = sum(max(0.0, (p["entry"] - p["stop"]) * p["qty"] + brk()) for p in s["positions"])  # entry leg paid
+    r = sum(max(0.0, (p["entry"] - p["stop"] + C.tick_size(p["stop"])) * p["qty"] + brk()) for p in s["positions"])  # entry leg paid
     r += sum(trade_risk(o["qty"], o["limit"], o["stop"]) for o in s["orders"])
     return r
 
@@ -235,12 +248,16 @@ def close_pos(s, p, date, price, reason, when=None, how=None):
     s["positions"].remove(p)
 
 
+def tk(p):
+    return C.tick_size(p)
+
+
 def walk_exits(seq, stop, target, res):
     """Walk intraday bars in time order and return the level actually reached first.
     Only when one bar (1 minute, or 5 if that is all there is) touches both is the
     order estimated, by which level is nearer that bar's open; that case is flagged."""
     for x in seq:
-        hs, ht = x["l"] <= stop, x["h"] >= target
+        hs, ht = x["l"] <= stop, x["h"] >= round(target + tk(target), 4)  # a resting sell needs a trade through it
         if hs and ht:
             first = "stop" if (x["o"] - stop) <= (target - x["o"]) else "target"
             return first, x, "both in one %s bar at %s: %s nearer the open (estimate)" % (res, x["time"], first)
@@ -253,7 +270,9 @@ def walk_exits(seq, stop, target, res):
 
 def exit_price(kind, x, stop, target):
     if kind == "stop":
-        return min(x["o"], stop)    # a bar that opens below the stop sells at its open
+        if x["o"] <= stop:
+            return x["o"]           # opened below the stop: sells at the open
+        return round(stop - tk(stop), 4)  # one tick of slippage on a stop
     return max(x["o"], target)
 
 
@@ -281,15 +300,15 @@ def process_bar(s, code_bars, date, P, events, intraday=None):
             o["cancel_reason"] = "opened %.3f, more than 0.5 ATR above the limit" % b["o"]
         elif b["o"] <= o["stop"]:
             o["cancel_reason"] = "opened at/below the stop, setup void"
-        elif b["l"] <= o["limit"]:
+        elif b["l"] <= round(o["limit"] - tk(o["limit"]), 4):  # a resting buy needs a trade through it
             if seq:
                 late = [x for x in seq if x["time"] >= RULES["entry_not_before"]]
                 for i, x in enumerate(late):
-                    if x["l"] <= o["limit"]:
+                    if x["l"] <= round(o["limit"] - tk(o["limit"]), 4):
                         fill, ftime, after = min(x["o"], o["limit"]), x["time"], late[i:]
                         break
                 if fill is None:
-                    events.append("NO FILL %s: limit only touched before %s" % (o["code"], RULES["entry_not_before"]))
+                    events.append("NO FILL %s: limit only traded through before %s" % (o["code"], RULES["entry_not_before"]))
             else:  # no intraday data at all: daily fallback, flagged
                 fill, ftime = min(b["o"], o["limit"]), "unverified (daily data only)"
         if fill is not None:
@@ -328,7 +347,7 @@ def process_bar(s, code_bars, date, P, events, intraday=None):
 
     for p in list(s["positions"]):
         b = code_bars.get(p["code"], {}).get(date)
-        if not b or p["entry_date"] >= date:
+        if not b or p["entry_date"] >= date or p.get("frozen"):
             continue
         p["bars_held"] += 1
         p["mfe"], p["mae"] = max(p["mfe"], b["h"]), min(p["mae"], b["l"])
@@ -342,12 +361,12 @@ def process_bar(s, code_bars, date, P, events, intraday=None):
             events.append("TARGET %s @ %.3f at the open" % (p["code"], b["o"]))
             continue
         kind = None
-        if b["l"] <= p["stop"] or b["h"] >= p["target"]:
+        if b["l"] <= p["stop"] or b["h"] >= round(p["target"] + tk(p["target"]), 4):
             if seq:
                 kind, x, how = walk_exits(seq, p["stop"], p["target"], res)
             if not kind:  # no intraday data: use the daily bar, flag any two-sided day as an estimate
                 x = b
-                if b["l"] <= p["stop"] and b["h"] >= p["target"]:
+                if b["l"] <= p["stop"] and b["h"] >= round(p["target"] + tk(p["target"]), 4):
                     kind = "stop" if (b["o"] - p["stop"]) <= (p["target"] - b["o"]) else "target"
                     how = "daily data only, both touched: %s nearer the open (estimate)" % kind
                 else:
@@ -366,20 +385,62 @@ def process_bar(s, code_bars, date, P, events, intraday=None):
             p["last_close"] = b["c"]
 
 
-def mark_to_market(s, code_bars, date):
+def mark_to_market(s, code_bars, date, bench_bars=None):
     mv = 0.0
     for p in s["positions"]:
         b = code_bars.get(p["code"], {}).get(date)
         px = b["c"] if b else p.get("last_close", p["entry"])
-        p["last_close"] = px
-        mv += px * p["qty"]
+        if not p.get("frozen"):
+            p["last_close"] = px
+            if b:
+                p["last_seen"] = date
+        mv += p["last_close"] * p["qty"]
     eq = s["cash"] + mv
-    s["equity_history"].append({"date": date, "equity": round(eq, 2), "cash": round(s["cash"], 2),
-                                "positions": len(s["positions"]), "orders": len(s["orders"])})
+    row = {"date": date, "equity": round(eq, 2), "cash": round(s["cash"], 2),
+           "positions": len(s["positions"]), "orders": len(s["orders"])}
+    bb = (bench_bars or {}).get(date)
+    if bb:
+        bm = s.setdefault("benchmark", {"code": RULES["benchmark"], "start_date": date, "start_price": bb["c"],
+                                        "units": RULES["start_equity"] / bb["c"]})
+        row["benchmark"] = round(bm["units"] * bb["c"], 2)
+    s["equity_history"].append(row)
     s["peak_equity"] = max(s["peak_equity"], eq)
     if s["peak_equity"] - eq >= RULES["max_drawdown"] and not s["halted"]:
         s["halted"], s["halt_reason"] = True, "drawdown %.2f from peak on %s" % (s["peak_equity"] - eq, date)
+        s["ever_halted"] = True
     return eq
+
+
+def corp_action_check(s, code_bars, dates):
+    """Flag possible splits/consolidations: an overnight move over 40%, or Yahoo re-writing the
+    close we stored for a held stock (history adjusted for a split). Flagged positions are frozen
+    (no exits processed) until reviewed; flagged orders are cancelled."""
+    alerts = []
+    for p in s["positions"]:
+        bars = code_bars.get(p["code"], {})
+        seen = p.get("last_seen")
+        if seen and seen in bars and p.get("last_close"):
+            ratio = bars[seen]["c"] / p["last_close"]
+            if abs(ratio - 1) > 0.05:
+                p["frozen"] = "price history for %s changed by %.0f%% (split/consolidation?)" % (seen, (ratio - 1) * 100)
+        for d in dates:
+            ks = sorted(k for k in bars if k < d)
+            if d in bars and ks:
+                jump = bars[d]["o"] / bars[ks[-1]]["c"] - 1
+                if abs(jump) > RULES["corp_action_jump"]:
+                    p["frozen"] = "opened %+.0f%% on %s (corporate action?)" % (jump * 100, d)
+        if p.get("frozen"):
+            alerts.append("%s CORPORATE ACTION? %s: %s. Position frozen for manual review." % (dates[0] if dates else "", p["code"], p["frozen"]))
+    for o in list(s["orders"]):
+        bars = code_bars.get(o["code"], {})
+        for d in dates:
+            ks = sorted(k for k in bars if k < d)
+            if d in bars and ks and abs(bars[d]["o"] / bars[ks[-1]]["c"] - 1) > RULES["corp_action_jump"]:
+                o["cancel_reason"], o["cancel_date"] = "opened >40%% away on %s (corporate action?)" % d, d
+                s["cancelled"].append(o); s["orders"].remove(o)
+                alerts.append("%s CANCELLED %s: %s" % (d, o["code"], o["cancel_reason"]))
+                break
+    return alerts
 
 
 def cmd_update(a):
@@ -395,16 +456,21 @@ def cmd_update(a):
         code_bars[c] = {b["date"]: b for b in bars_for(c)}
     for c in codes:
         intraday[c] = load_intraday(c)
+    try:
+        bench = {b["date"]: b for b in bars_for(RULES["benchmark"])}
+    except Exception:
+        bench = {}
+    alerts = corp_action_check(s, code_bars, dates)
     out = []
     for d in dates:
-        events = []
+        events = [a for a in alerts if a.startswith(d)]
         process_bar(s, code_bars, d, P, events, intraday)
         sbook = {"cash": 0.0, "orders": sh["orders"], "positions": sh["positions"], "closed": sh["closed"],
                  "cancelled": sh["cancelled"], "breaches": []}
         sev = []
         process_bar(sbook, code_bars, d, P, sev, intraday)
         events += ["shadow: " + e for e in sev]
-        eq = mark_to_market(s, code_bars, d)
+        eq = mark_to_market(s, code_bars, d, bench)
         s["last_processed"] = d
         out.append({"date": d, "equity": round(eq, 2), "events": events})
     save_state(s)
@@ -525,7 +591,7 @@ def build_plan(code, bars, info, P, risk_dollars, equity):
     why = None
     if res and (res - entry) / rps < P["target_R"]:
         why = "resistance %.3f leaves %.1fR (< %.1fR)" % (res, (res - entry) / rps, P["target_R"])
-    qty = int((risk_dollars - 2 * brk()) // rps)
+    qty = int((risk_dollars - 2 * brk()) // (rps + C.tick_size(stop)))
     avg_vol = sum(b["v"] for b in bars[-20:]) / 20.0
     qty = max(0, min(qty, int(equity * RULES["max_position_pct"] / 100 // entry), int(avg_vol * RULES["max_pct_avg_volume"] / 100)))
     value = qty * entry
@@ -612,8 +678,8 @@ def cmd_place(a):
         errs.append("market filter closed")
     if a.code in {x["code"] for x in s["positions"] + s["orders"]}:
         errs.append("already held or pending")
-    sectors = {x.get("sector", "").lower() for x in s["positions"] + s["orders"]}
-    if a.sector.lower() in sectors:
+    sectors = {x.get("sector") for x in s["positions"] + s["orders"]}
+    if a.sector in sectors:
         errs.append("sector %s already held (rule 6)" % a.sector)
     risk = trade_risk(a.qty, a.limit, a.stop)
     if risk > g["risk_per_trade"] + 0.01:
@@ -690,12 +756,21 @@ def cmd_report(a):
     placed_today = [o for o in s["orders"] if o["placed"] == d]
     allc = s["closed"]
     wins = sum(t["pnl"] > 0 for t in allc)
-    L = ["# Paper account: %s" % d, "",
+    gl = go_live_status(s)
+    L = ["# Paper account: %s" % d, ""]
+    if gl["review30_due"]:
+        L += ["**30-TRADE REVIEW DUE**: time to sit down with Prabhakar (see RULES.md, go-live criteria).", ""]
+    if any(p.get("frozen") for p in s["positions"]):
+        L += ["**FROZEN POSITION**: possible corporate action, needs manual review.", ""]
+    L += [
          "**Value $%s** · today %+.2f · total %+.2f (%+.2f%%)" % (format(round(eq, 2), ","), eq - prev, tot, tot / RULES["start_equity"] * 100),
          "Trades today: %d filled, %d closed, %d new orders" % (len(filled_today), len(closed_today), len(placed_today)),
          "Closed so far: %d (wins %d, avg %sR) · loss streak %d" % (len(allc), wins,
              round(sum(t["R"] or 0 for t in allc) / len(allc), 2) if allc else "–", g["loss_streak"]),
          "Gates: %s" % ("OPEN" if g["open"] else "SHUT – " + "; ".join(g["reasons"])),
+         ("Benchmark %s (price only): $%s · account %+.2f vs benchmark" % (s["benchmark"]["code"], format(eh[-1]["benchmark"], ","),
+             eq - eh[-1]["benchmark"])) if eh and "benchmark" in eh[-1] else "Benchmark: not started",
+         "Go-live checklist: %d/%d met" % (sum(c["met"] for c in gl["checks"]), len(gl["checks"])),
          "Open risk $%.2f / $250 · week realised %+.2f / -500 · drawdown %.2f / 1500" % (
              g["open_risk"], g["week_pnl_realized"], s["peak_equity"] - eq), ""]
     if s["positions"]:
@@ -730,6 +805,50 @@ def cmd_report(a):
     print(txt)
 
 
+GO_LIVE = [
+    ("at least 30 closed trades", lambda s, x: x["closed"] >= 30),
+    ("net P&L after brokerage is positive", lambda s, x: x["net_pnl"] > 0),
+    ("average R is positive", lambda s, x: (x["avg_R"] or 0) > 0),
+    ("account beats the ASX 200 ETF line", lambda s, x: x["vs_benchmark"] is not None and x["vs_benchmark"] > 0),
+    ("drawdown halt never triggered", lambda s, x: not s.get("ever_halted")),
+    ("no rule breaches in the last 10 trades", lambda s, x: x["breaches_last10"] == 0),
+    ("no process errors in the last 10 trades", lambda s, x: x["process_errors_last10"] == 0),
+]
+
+
+def go_live_status(s):
+    allc = s["closed"]
+    last10 = sorted(allc, key=lambda t: (t["exit_date"], t["id"]))[-10:]
+    eh = s["equity_history"]
+    vs = (eh[-1]["equity"] - eh[-1]["benchmark"]) if eh and "benchmark" in eh[-1] else None
+    x = {"closed": len(allc), "net_pnl": round(sum(t["pnl"] for t in allc), 2),
+         "avg_R": round(sum(t["R"] or 0 for t in allc) / len(allc), 2) if allc else None,
+         "vs_benchmark": round(vs, 2) if vs is not None else None,
+         "breaches_last10": sum(bool(t.get("breach")) for t in last10),
+         "process_errors_last10": sum(bool(t.get("process_error")) for t in last10)}
+    x["checks"] = [{"criterion": n, "met": bool(f(s, x))} for n, f in GO_LIVE]
+    x["all_met"] = all(c["met"] for c in x["checks"])
+    x["review30_due"] = len(allc) >= 30 and not s.get("review30_done")
+    return x
+
+
+def cmd_tag(a):
+    s = load_state()
+    t = next((t for t in s["closed"] if t["id"] == a.id), None)
+    if not t:
+        sys.exit("no closed trade %s" % a.id)
+    if a.process_error:
+        t["process_error"] = a.process_error
+    if a.bad_luck:
+        t["bad_luck"] = a.bad_luck
+    save_state(s)
+    print(json.dumps({"id": a.id, "process_error": t.get("process_error"), "bad_luck": t.get("bad_luck")}, indent=1))
+
+
+def cmd_golive(a):
+    print(json.dumps(go_live_status(load_state()), indent=1))
+
+
 def cmd_status(a):
     s = load_state()
     print(json.dumps({"budgets": budgets(s, s["last_processed"] or dt.date.today().isoformat()),
@@ -751,8 +870,14 @@ def main():
     k.add_argument("--category", required=True, choices=SHADOW_CATEGORIES)
     k.add_argument("--reason", required=True)
     sp.add_parser("shadow")
+    tg = sp.add_parser("tag", help="record the daily review verdict on a closed trade")
+    tg.add_argument("--id", required=True)
+    tg.add_argument("--process-error", dest="process_error")
+    tg.add_argument("--bad-luck", dest="bad_luck")
+    sp.add_parser("golive")
     p = sp.add_parser("place")
-    for k in ("code", "sector", "thesis", "debate", "news", "results_clear", "exdiv_clear"):
+    p.add_argument("--sector", required=True, choices=GICS_GROUPS)
+    for k in ("code", "thesis", "debate", "news", "results_clear", "exdiv_clear"):
         p.add_argument("--" + k.replace("_", "-"), dest=k, required=True)
     p.add_argument("--qty", type=int, required=True)
     for k in ("limit", "stop", "target", "atr", "debate_net", "expected_R"):
@@ -761,7 +886,8 @@ def main():
     sp.add_parser("report"); sp.add_parser("status")
     a = ap.parse_args()
     {"update": cmd_update, "candidates": cmd_candidates, "place": cmd_place, "review": cmd_review,
-     "report": cmd_report, "status": cmd_status, "skip": cmd_skip, "shadow": cmd_shadow}[a.cmd](a)
+     "report": cmd_report, "status": cmd_status, "skip": cmd_skip, "shadow": cmd_shadow,
+     "tag": cmd_tag, "golive": cmd_golive}[a.cmd](a)
 
 
 if __name__ == "__main__":
