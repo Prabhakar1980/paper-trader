@@ -34,4 +34,9 @@ Account: $50,000 paper money · brokerage $5.50 each way ($11 round trip) · pap
 20. Daily report after the close: value, today's P&L, total P&L, trades, open positions, breaches.
 21. Judge after ≥ 30 closed trades, against holding an ASX 200 ETF over the same period.
 
-Simulation is end-of-day: if a day touches both stop and target, the stop is assumed first. Fills at the limit or the open, whichever is lower.
+## How fills and exits are decided (no "stop first" assumption)
+- The run happens after the close, but it replays the day minute by minute using 1-minute prices (last 7 trading days) or 5-minute prices (up to 60 days). Whichever of the stop or the target was actually reached first is the exit, with its time recorded.
+- An open below the stop sells at the open (a gap). An open above the target sells at the open.
+- Only when a single minute bar touches both levels is the order estimated, using whichever level is nearer that bar's open. Such exits are tagged "estimate" in the trade record and the daily review.
+- With no intraday data at all (run missed for more than 60 days), daily prices are used and the result is tagged "daily data only".
+- Fills happen at the limit, or at the bar's open if it opened lower.

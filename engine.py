@@ -202,14 +202,30 @@ def market_filter():
 
 
 # ---------- daily processing ----------
-def close_pos(s, p, date, price, reason):
+def load_intraday(code):
+    """date -> (bars, resolution). 1-minute bars cover ~7 trading days, 5-minute ~60 days."""
+    out = {}
+    for interval, rng in (("5m", "60d"), ("1m", "7d")):  # 1m overwrites 5m where both exist
+        try:
+            days = {}
+            for x in C.get_bars(code, interval, rng):
+                days.setdefault(x["date"], []).append(x)
+            for d, seq in days.items():
+                out[d] = (seq, interval)
+        except Exception:
+            pass
+    return out
+
+
+
+def close_pos(s, p, date, price, reason, when=None, how=None):
     gross = (price - p["entry"]) * p["qty"]
     pnl = gross - 2 * brk()
     s["cash"] += price * p["qty"] - brk()
     r_unit = p["init_risk_per_share"] * p["qty"]
     t = dict(p)
-    t.update(exit_date=date, exit=round(price, 4), reason=reason, pnl=round(pnl, 2),
-             R=round(gross / r_unit, 2) if r_unit else None)
+    t.update(exit_date=date, exit=round(price, 4), reason=reason, pnl=round(pnl, 2), exit_time=when,
+             exit_resolution=how, R=round(gross / r_unit, 2) if r_unit else None)
     if pnl < -RULES["max_risk_per_stock"] - 0.01:
         b = {"date": date, "id": p["id"], "code": p["code"], "rule": "5 per-stock loss",
              "detail": "lost %.2f (limit 100) via %s" % (-pnl, reason)}
@@ -219,13 +235,36 @@ def close_pos(s, p, date, price, reason):
     s["positions"].remove(p)
 
 
-def intraday_fill(o, bars5):
-    """First 5-minute bar from 11:00 that trades at/below the limit. Returns (fill, time, later_bars)."""
-    late = [x for x in bars5 if x["time"] >= RULES["entry_not_before"]]
-    for i, x in enumerate(late):
-        if x["l"] <= o["limit"]:
-            return min(x["o"], o["limit"]), x["time"], late[i:]
-    return None, None, []
+def walk_exits(seq, stop, target, res):
+    """Walk intraday bars in time order and return the level actually reached first.
+    Only when one bar (1 minute, or 5 if that is all there is) touches both is the
+    order estimated, by which level is nearer that bar's open; that case is flagged."""
+    for x in seq:
+        hs, ht = x["l"] <= stop, x["h"] >= target
+        if hs and ht:
+            first = "stop" if (x["o"] - stop) <= (target - x["o"]) else "target"
+            return first, x, "both in one %s bar at %s: %s nearer the open (estimate)" % (res, x["time"], first)
+        if hs:
+            return "stop", x, "%s bars: stop reached first at %s" % (res, x["time"])
+        if ht:
+            return "target", x, "%s bars: target reached first at %s" % (res, x["time"])
+    return None, None, None
+
+
+def exit_price(kind, x, stop, target):
+    if kind == "stop":
+        return min(x["o"], stop)    # a bar that opens below the stop sells at its open
+    return max(x["o"], target)
+
+
+def apply_exit(s, p, date, kind, x, how, events, tag=""):
+    px = exit_price(kind, x, p["stop"], p["target"])
+    if kind == "stop":
+        reason = ("breakeven stop" if p["be_moved"] else "stop") + tag
+    else:
+        reason = "target" + tag
+    close_pos(s, p, date, px, reason, x.get("time"), how)
+    events.append("%s %s @ %.3f at %s (%s)" % (reason.upper(), p["code"], px, x.get("time", "?"), how))
 
 
 def process_bar(s, code_bars, date, P, events, intraday=None):
@@ -236,39 +275,48 @@ def process_bar(s, code_bars, date, P, events, intraday=None):
         if not b or o["placed"] >= date:
             continue
         o["days_live"] += 1
-        bars5 = intraday.get(o["code"], {}).get(date)
+        seq, res = intraday.get(o["code"], {}).get(date, (None, None))
         fill, ftime, after = None, None, []
         if b["o"] > o["limit"] + RULES["max_order_gap_atr"] * o["atr"]:
             o["cancel_reason"] = "opened %.3f, more than 0.5 ATR above the limit" % b["o"]
         elif b["o"] <= o["stop"]:
             o["cancel_reason"] = "opened at/below the stop, setup void"
         elif b["l"] <= o["limit"]:
-            if bars5:
-                fill, ftime, after = intraday_fill(o, bars5)
+            if seq:
+                late = [x for x in seq if x["time"] >= RULES["entry_not_before"]]
+                for i, x in enumerate(late):
+                    if x["l"] <= o["limit"]:
+                        fill, ftime, after = min(x["o"], o["limit"]), x["time"], late[i:]
+                        break
                 if fill is None:
                     events.append("NO FILL %s: limit only touched before %s" % (o["code"], RULES["entry_not_before"]))
-            else:  # no 5-minute data (older than 5 days): daily fallback, flagged
-                fill, ftime = min(b["o"], o["limit"]), "unverified"
+            else:  # no intraday data at all: daily fallback, flagged
+                fill, ftime = min(b["o"], o["limit"]), "unverified (daily data only)"
         if fill is not None:
             s["cash"] -= fill * o["qty"] + brk()
             p = {k: o[k] for k in ("id", "code", "qty", "stop", "target", "atr", "sector", "thesis", "review")}
-            p.update(entry=round(fill, 4), entry_date=date, entry_time=ftime, init_stop=o["stop"],
-                     init_risk_per_share=round(fill - o["stop"], 4), bars_held=0, mfe=fill, mae=fill, be_moved=False)
+            p.update(entry=round(fill, 4), entry_date=date, entry_time=ftime, entry_resolution=res or "daily",
+                     init_stop=o["stop"], init_risk_per_share=round(fill - o["stop"], 4), bars_held=0,
+                     mfe=fill, mae=fill, be_moved=False)
             s["positions"].append(p)
             s["orders"].remove(o)
             events.append("FILLED %s %d @ %.3f at %s" % (o["code"], o["qty"], fill, ftime))
-            # rest of the fill day: stop checked before target in each 5-minute bar (conservative)
-            seq = after if after else [b]
-            for j, x in enumerate(seq):
-                if j:  # the fill bar's high may have come before the fill
-                    p["mfe"] = max(p["mfe"], x["h"])
-                p["mae"] = min(p["mae"], x["l"])
-                if x["l"] <= p["stop"]:
-                    close_pos(s, p, date, p["stop"], "stop (fill day)")
-                    events.append("STOPPED %s same day @ %.3f" % (p["code"], p["stop"])); break
-                if after and j and x["h"] >= p["target"]:
-                    close_pos(s, p, date, p["target"], "target (fill day)")
-                    events.append("TARGET %s same day @ %.3f" % (p["code"], p["target"])); break
+            if after:
+                # the fill bar itself can only stop out (its high may predate the fill); later bars walk normally
+                fb = after[0]
+                if fb["l"] <= p["stop"]:
+                    apply_exit(s, p, date, "stop", fb, "%s bars: fell to the stop in the fill bar %s" % (res, fb["time"]), events, " (fill day)")
+                else:
+                    kind, x, how = walk_exits(after[1:], p["stop"], p["target"], res)
+                    if kind:
+                        apply_exit(s, p, date, kind, x, how, events, " (fill day)")
+                for x in after[1:]:
+                    if p in s["positions"]:
+                        p["mfe"], p["mae"] = max(p["mfe"], x["h"]), min(p["mae"], x["l"])
+                if p in s["positions"]:
+                    p["mae"] = min(p["mae"], fb["l"])
+            elif b["l"] <= p["stop"]:  # daily-only fallback: can't order the moves, flag it
+                apply_exit(s, p, date, "stop", b, "daily data only: stop touched after an unverified fill", events, " (fill day)")
             continue
         elif o["days_live"] >= P["order_expiry_days"]:
             o["cancel_reason"] = "not filled in %d days" % o["days_live"]
@@ -284,19 +332,30 @@ def process_bar(s, code_bars, date, P, events, intraday=None):
             continue
         p["bars_held"] += 1
         p["mfe"], p["mae"] = max(p["mfe"], b["h"]), min(p["mae"], b["l"])
+        seq, res = intraday.get(p["code"], {}).get(date, (None, None))
         if b["o"] <= p["stop"]:
-            close_pos(s, p, date, b["o"], "gap through stop")
+            close_pos(s, p, date, b["o"], "gap through stop", "open", "opened below the stop")
             events.append("GAP-STOP %s @ %.3f" % (p["code"], b["o"]))
-        elif b["l"] <= p["stop"]:
-            reason = "breakeven stop" if p["be_moved"] else "stop"
-            close_pos(s, p, date, p["stop"], reason)
-            events.append("%s %s @ %.3f" % (reason.upper(), p["code"], p["stop"]))
-        elif b["h"] >= p["target"]:
-            px = max(b["o"], p["target"])
-            close_pos(s, p, date, px, "target")
-            events.append("TARGET %s @ %.3f" % (p["code"], px))
+            continue
+        if b["o"] >= p["target"]:
+            close_pos(s, p, date, b["o"], "target", "open", "opened above the target")
+            events.append("TARGET %s @ %.3f at the open" % (p["code"], b["o"]))
+            continue
+        kind = None
+        if b["l"] <= p["stop"] or b["h"] >= p["target"]:
+            if seq:
+                kind, x, how = walk_exits(seq, p["stop"], p["target"], res)
+            if not kind:  # no intraday data: use the daily bar, flag any two-sided day as an estimate
+                x = b
+                if b["l"] <= p["stop"] and b["h"] >= p["target"]:
+                    kind = "stop" if (b["o"] - p["stop"]) <= (p["target"] - b["o"]) else "target"
+                    how = "daily data only, both touched: %s nearer the open (estimate)" % kind
+                else:
+                    kind = "stop" if b["l"] <= p["stop"] else "target"
+                    how = "daily data only"
+            apply_exit(s, p, date, kind, x, how, events)
         elif p["bars_held"] >= P["time_stop_days"]:
-            close_pos(s, p, date, b["c"], "time stop")
+            close_pos(s, p, date, b["c"], "time stop", "close", "time stop")
             events.append("TIME-STOP %s @ %.3f" % (p["code"], b["c"]))
         else:
             if not p["be_moved"] and b["h"] >= p["entry"] + P["breakeven_at_R"] * p["init_risk_per_share"]:
@@ -333,12 +392,8 @@ def cmd_update(a):
     code_bars, intraday = {}, {}
     for c in codes:
         code_bars[c] = {b["date"]: b for b in bars_for(c)}
-    for c in {o["code"] for o in s["orders"]}:
-        try:
-            for x in C.get_bars(c, "5m", "5d"):
-                intraday.setdefault(c, {}).setdefault(x["date"], []).append(x)
-        except Exception:
-            pass
+    for c in codes:
+        intraday[c] = load_intraday(c)
     out = []
     for d in dates:
         events = []
@@ -512,6 +567,8 @@ def cmd_review(a):
                     tags.append("shakeout: hit the original target within 10 days after the stop")
             except Exception:
                 pass
+        if "estimate" in (t.get("exit_resolution") or "") or "unverified" in str(t.get("entry_time")):
+            tags.append("ESTIMATED timing: check the price data for this trade")
         if t["reason"] == "time stop":
             tags.append("time stop: went nowhere")
         if t["reason"] == "breakeven stop":
