@@ -58,5 +58,165 @@
  "halt_reason": null,
  "breaches": [],
  "next_id": 3,
- "created": "2026-11-11"
+ "created": "2026-11-11",
+ "shadow": {
+  "orders": [
+   {
+    "id": "S0001",
+    "code": "SOL",
+    "qty": 16,
+    "limit": 47.92,
+    "stop": 45.5,
+    "target": 52.76,
+    "atr": 0.8718,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 49.430 leaves 0.6R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 49.430 leaves 0.6R (< 2.0R)",
+     "expected_R": 0.311,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0002",
+    "code": "ANZ",
+    "qty": 29,
+    "limit": 39.55,
+    "stop": 38.21,
+    "target": 42.23,
+    "atr": 0.8928,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 40.255 leaves 0.5R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 40.255 leaves 0.5R (< 2.0R)",
+     "expected_R": 0.107,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0003",
+    "code": "ALL",
+    "qty": 21,
+    "limit": 64.01,
+    "stop": 62.2,
+    "target": 67.63,
+    "atr": 1.2028,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 66.710 leaves 1.5R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 66.710 leaves 1.5R (< 2.0R)",
+     "expected_R": 0.117,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0004",
+    "code": "RGN",
+    "qty": 496,
+    "limit": 2.29,
+    "stop": 2.21,
+    "target": 2.45,
+    "atr": 0.0467,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 2.390 leaves 1.2R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 2.390 leaves 1.2R (< 2.0R)",
+     "expected_R": -0.027,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0005",
+    "code": "BEN",
+    "qty": 128,
+    "limit": 10.64,
+    "stop": 10.33,
+    "target": 11.26,
+    "atr": 0.2015,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 10.850 leaves 0.7R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 10.850 leaves 0.7R (< 2.0R)",
+     "expected_R": 0.069,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0006",
+    "code": "RHC",
+    "qty": 28,
+    "limit": 55.24,
+    "stop": 53.84,
+    "target": 58.04,
+    "atr": 0.9293,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 56.500 leaves 0.9R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 56.500 leaves 0.9R (< 2.0R)",
+     "expected_R": 0.416,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0007",
+    "code": "SUN",
+    "qty": 27,
+    "limit": 20.52,
+    "stop": 19.1,
+    "target": 23.36,
+    "atr": 0.399,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "position $554 below $2200 (brokerage drag)",
+    "review": {
+     "category": "size/brokerage",
+     "why": "position $554 below $2200 (brokerage drag)",
+     "expected_R": 0.106,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0008",
+    "code": "TPG",
+    "qty": 283,
+    "limit": 3.91,
+    "stop": 3.77,
+    "target": 4.19,
+    "atr": 0.088,
+    "sector": "",
+    "placed": "2026-11-11",
+    "days_live": 0,
+    "thesis": "resistance 4.000 leaves 0.6R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 4.000 leaves 0.6R (< 2.0R)",
+     "expected_R": -0.01,
+     "score": 90
+    }
+   }
+  ],
+  "positions": [],
+  "closed": [],
+  "cancelled": [],
+  "next_id": 9
+ }
 }

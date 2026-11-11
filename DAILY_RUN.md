@@ -29,8 +29,15 @@ For each candidate in order, while slots and risk budget remain, run the asx-tra
 1. `news.py CODE`, plus a web search for the results date, ex-dividend date, trading halts, capital raisings and director selling. Rule 14 failure → skip.
 2. GICS industry group. A clash with a held or pending stock (rule 6) → skip.
 3. Bull/bear debate per the skill's `references/debate.md`, using the candidate's numbers. Run `debate_score.py`. Anything other than TRADE PLAN OK → skip.
+   Every candidate you skip at steps 1–3, or because slots or budget ran out, MUST be logged:
+   `python engine.py skip --code CODE --category <calendar|sector|debate|news|no slot|other> --reason "..."`
 4. `python engine.py place ...` with the candidate's qty, limit, stop, target and atr, plus sector, thesis, debate, debate-net, news, results-clear, exdiv-clear and expected-R. If it is refused, do not work around it.
 5. After each placement the risk budget for the next slot changes. Re-run `candidates --tickers <remaining codes>` to resize before placing again.
+
+Mechanical rejections (resistance, size/brokerage, replay odds) and gate-shut days are added to the shadow journal automatically by `candidates` (up to 8 a day).
+
+## 3b. Shadow journal
+`python engine.py shadow` shows how rejected trades would have done, by rejection reason, next to the real trades' average R. Mention it in lessons.md only when a category has 10 or more closed shadows. A filter whose blocked trades do **better** than the real trades is a candidate for discussion with Prabhakar at the 30-trade review. Never loosen a fixed rule on your own.
 
 ## 4. Report
 `python engine.py report` writes `reports/<date>.md`.

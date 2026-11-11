@@ -384,7 +384,8 @@ def mark_to_market(s, code_bars, date):
 
 def cmd_update(a):
     s, P = load_state(), load_params()
-    codes = sorted({x["code"] for x in s["positions"] + s["orders"]})
+    sh = shadow_book(s)
+    codes = sorted({x["code"] for x in s["positions"] + s["orders"] + sh["positions"] + sh["orders"]})
     idx = bars_for(RULES["index"])
     dates = [b["date"] for b in trading_dates(idx, s["last_processed"])]
     if s["last_processed"] is None:  # first run: start from the latest session, no history to replay
@@ -398,11 +399,92 @@ def cmd_update(a):
     for d in dates:
         events = []
         process_bar(s, code_bars, d, P, events, intraday)
+        sbook = {"cash": 0.0, "orders": sh["orders"], "positions": sh["positions"], "closed": sh["closed"],
+                 "cancelled": sh["cancelled"], "breaches": []}
+        sev = []
+        process_bar(sbook, code_bars, d, P, sev, intraday)
+        events += ["shadow: " + e for e in sev]
         eq = mark_to_market(s, code_bars, d)
         s["last_processed"] = d
         out.append({"date": d, "equity": round(eq, 2), "events": events})
     save_state(s)
     print(json.dumps({"processed": out, "budgets": budgets(s, s["last_processed"])}, indent=1))
+
+
+# ---------- shadow journal ----------
+LAST_CANDS = os.path.join(ROOT, "last_candidates.json")
+SHADOW_CATEGORIES = ["gate: market filter", "gate: limits/slots", "resistance", "size/brokerage", "replay odds",
+                     "debate", "calendar", "sector", "news", "no slot", "other"]
+
+
+def shadow_book(s):
+    return s.setdefault("shadow", {"orders": [], "positions": [], "closed": [], "cancelled": [], "next_id": 1})
+
+
+def shadow_category(why):
+    w = why.lower()
+    if w.startswith("gate"):
+        return "gate: market filter" if "market filter" in w else "gate: limits/slots"
+    for key, cat in (("resistance", "resistance"), ("position $", "size/brokerage"), ("size rounds", "size/brokerage"),
+                     ("replay", "replay odds")):
+        if key in w:
+            return cat
+    return "other"
+
+
+def shadow_add(s, plan, why, date, category=None):
+    """Track a rejected candidate as if it had been ordered. Returns False if already tracked."""
+    sh = shadow_book(s)
+    live = {x["code"] for x in sh["orders"] + sh["positions"]}
+    if plan["code"] in live:
+        return False
+    rps = plan["entry_limit"] - plan["stop"]
+    qty = plan["qty"] or max(1, int((RULES["max_risk_per_stock"] - 2 * brk()) // rps))
+    sid = "S%04d" % sh["next_id"]; sh["next_id"] += 1
+    sh["orders"].append({"id": sid, "code": plan["code"], "qty": qty, "limit": plan["entry_limit"],
+                         "stop": plan["stop"], "target": plan["target"], "atr": plan["atr"],
+                         "sector": "", "placed": date, "days_live": 0, "thesis": why,
+                         "review": {"category": category or shadow_category(why), "why": why,
+                                    "expected_R": plan["odds"]["expected_R"], "score": plan["scan"]["score"]}})
+    return True
+
+
+def shadow_stats(s):
+    sh = shadow_book(s)
+    real = s["closed"]
+    rows = {}
+    for t in sh["closed"]:
+        c = t["review"]["category"]
+        r = rows.setdefault(c, {"closed": 0, "wins": 0, "sum_R": 0.0})
+        r["closed"] += 1; r["wins"] += t["pnl"] > 0; r["sum_R"] += t["R"] or 0
+    for c, r in rows.items():
+        r["win_rate"] = round(r["wins"] / r["closed"], 2)
+        r["avg_R"] = round(r["sum_R"] / r["closed"], 2)
+        del r["sum_R"]
+    for o in sh["orders"] + sh["positions"] + sh["cancelled"]:
+        c = o["review"]["category"]
+        r = rows.setdefault(c, {"closed": 0, "wins": 0})
+        key = "never_filled" if o in sh["cancelled"] else "live"
+        r[key] = r.get(key, 0) + 1
+    return {"by_reason": rows, "real_trades": {"closed": len(real),
+            "avg_R": round(sum(t["R"] or 0 for t in real) / len(real), 2) if real else None},
+            "note": "A filter earns its keep when the trades it blocked average worse than the trades taken. "
+                    "Need ~10+ closed shadows in a category before reading anything into it."}
+
+
+def cmd_skip(a):
+    s = load_state()
+    last = json.load(open(LAST_CANDS)) if os.path.isfile(LAST_CANDS) else {"candidates": []}
+    plan = next((c for c in last["candidates"] if c["code"] == a.code), None)
+    if not plan:
+        sys.exit("%s is not in last_candidates.json; run candidates first" % a.code)
+    ok = shadow_add(s, plan, a.reason, s["last_processed"], a.category)
+    save_state(s)
+    print(json.dumps({"shadowed": ok, "code": a.code, "category": a.category}, indent=1))
+
+
+def cmd_shadow(a):
+    print(json.dumps(shadow_stats(load_state()), indent=1))
 
 
 # ---------- candidates ----------
@@ -440,28 +522,29 @@ def build_plan(code, bars, info, P, risk_dollars, equity):
         return None, "invalid stop"
     target = C.round_tick(entry + P["target_R"] * rps, "down")
     res = plan.get("nearest_resistance")
+    why = None
     if res and (res - entry) / rps < P["target_R"]:
-        return None, "resistance %.3f leaves %.1fR (< %.1fR)" % (res, (res - entry) / rps, P["target_R"])
+        why = "resistance %.3f leaves %.1fR (< %.1fR)" % (res, (res - entry) / rps, P["target_R"])
     qty = int((risk_dollars - 2 * brk()) // rps)
     avg_vol = sum(b["v"] for b in bars[-20:]) / 20.0
-    qty = min(qty, int(equity * RULES["max_position_pct"] / 100 // entry), int(avg_vol * RULES["max_pct_avg_volume"] / 100))
-    if qty <= 0:
-        return None, "size rounds to zero"
+    qty = max(0, min(qty, int(equity * RULES["max_position_pct"] / 100 // entry), int(avg_vol * RULES["max_pct_avg_volume"] / 100)))
     value = qty * entry
-    if value < RULES["min_position_value"]:
-        return None, "position $%.0f below $%.0f (brokerage drag)" % (value, RULES["min_position_value"])
+    if qty <= 0:
+        why = why or "size rounds to zero"
+    elif value < RULES["min_position_value"]:
+        why = why or "position $%.0f below $%.0f (brokerage drag)" % (value, RULES["min_position_value"])
     tpl = TM.swing_templates(bars[-250:])
     sim = TM.sim_swing(entry, stop, target, tpl, P["time_stop_days"], n=10000)
     simn = TM.sim_swing(entry, stop, target, TM.swing_templates(bars[-250:], neutral=True), P["time_stop_days"], n=10000)
     if sim["expected_R"] < P["min_expected_R"]:
-        return None, "replay expectancy %.2fR below %.2fR" % (sim["expected_R"], P["min_expected_R"])
+        why = why or "replay expectancy %.2fR below %.2fR" % (sim["expected_R"], P["min_expected_R"])
     return {"code": code, "status": st, "last_close": plan["last_close"], "entry_limit": entry, "stop": stop,
             "target": target, "risk_per_share": round(rps, 4), "stop_atr": round(rps / a, 2), "atr": round(a, 4),
             "qty": qty, "value": round(value, 2), "risk_dollars": round(trade_risk(qty, entry, stop), 2),
-            "drag_pct": round(2 * brk() / value * 100, 2), "zone": plan["entry_zone"], "resistance": res,
+            "drag_pct": round(2 * brk() / value * 100, 2) if value else None, "zone": plan["entry_zone"], "resistance": res,
             "swing_low": swing_low, "odds": {k: sim[k] for k in ("p_target_first", "p_stop_first", "expected_R")},
             "odds_neutral": {k: simn[k] for k in ("p_target_first", "p_stop_first", "expected_R")},
-            "scan": info, "notes": plan.get("notes", [])}, None
+            "scan": info, "notes": plan.get("notes", [])}, why
 
 
 def cmd_candidates(a):
@@ -472,9 +555,8 @@ def cmd_candidates(a):
     if not mf["ok"]:
         g["reasons"].append("market filter: ASX 200 %.1f below its 50-day EMA %.1f" % (mf["index_close"], mf["ema50"]))
         g["open"] = False
-    out = {"gates": g, "market_filter": mf, "candidates": [], "rejected": []}
-    if not g["open"]:
-        print(json.dumps(out, indent=1)); return
+    out = {"gates": g, "market_filter": mf, "candidates": [], "rejected": [], "shadowed": []}
+    gate_why = None if g["open"] else "gate: " + "; ".join(g["reasons"])
     cfg = C.load_config()
     cfg.update(min_turnover_aud=P["min_turnover"], min_price=P["min_price"], min_reward_risk=P["target_R"])
     idx = bars_for(RULES["index"])
@@ -503,14 +585,20 @@ def cmd_candidates(a):
         pool.append((info, bars))
     pool.sort(key=lambda x: (-x[0]["score"], -(x[0]["rs60_vs_index_pct"] or 0)))
     out["shortlist_size"] = len(pool)
-    for info, bars in pool[:a.top * 3]:
-        plan, why = build_plan(info["ticker"], bars, info, P, g["risk_per_trade"], g["equity"])
-        if plan:
+    budget = g["risk_per_trade"] if g["open"] else RULES["max_risk_per_stock"]
+    for info, bars in pool[:max(a.top * 3, a.shadow_max * 2)]:
+        plan, why = build_plan(info["ticker"], bars, info, P, budget, g["equity"])
+        why = gate_why or why
+        if plan and not why and len(out["candidates"]) < a.top:
             out["candidates"].append(plan)
-        else:
+        elif plan and why:
             out["rejected"].append({"code": info["ticker"], "why": why})
-        if len(out["candidates"]) >= a.top:
-            break
+            if len(out["shadowed"]) < a.shadow_max and shadow_add(s, plan, why, date):
+                out["shadowed"].append(info["ticker"])
+        elif not plan:
+            out["rejected"].append({"code": info["ticker"], "why": why})
+    save_state(s)
+    json.dump({"date": date, "candidates": out["candidates"]}, open(LAST_CANDS, "w"), indent=1)
     print(json.dumps(out, indent=1))
 
 
@@ -626,6 +714,13 @@ def cmd_report(a):
         for t in closed_today:
             L.append("- %s %s: %+.2f (%sR)%s" % (t["code"], t["reason"], t["pnl"], t["R"],
                                                " – BREACH" if t.get("breach") else ""))
+    st = shadow_stats(s)
+    if st["by_reason"]:
+        L.append("## Shadow journal (rejected trades tracked as if taken)")
+        for c, r in sorted(st["by_reason"].items()):
+            L.append("- %s: %d closed%s, %d live" % (c, r["closed"],
+                     (", win %d%%, avg %sR" % (r["win_rate"] * 100, r["avg_R"])) if r["closed"] else "", r.get("live", 0)))
+        L.append("- real trades: %d closed, avg %sR" % (st["real_trades"]["closed"], st["real_trades"]["avg_R"] or "–"))
     br = [b for b in s["breaches"] if b["date"] == d]
     L.append("## Rule breaches today")
     L += ["- %s: %s" % (b["rule"], b["detail"]) for b in br] or ["- none"]
@@ -650,6 +745,12 @@ def main():
     c.add_argument("--workers", type=int, default=6)
     c.add_argument("--max", type=int, default=0)
     c.add_argument("--tickers")
+    c.add_argument("--shadow-max", type=int, default=8, help="max new shadow entries per run")
+    k = sp.add_parser("skip", help="shadow a candidate skipped during review")
+    k.add_argument("--code", required=True)
+    k.add_argument("--category", required=True, choices=SHADOW_CATEGORIES)
+    k.add_argument("--reason", required=True)
+    sp.add_parser("shadow")
     p = sp.add_parser("place")
     for k in ("code", "sector", "thesis", "debate", "news", "results_clear", "exdiv_clear"):
         p.add_argument("--" + k.replace("_", "-"), dest=k, required=True)
@@ -660,7 +761,7 @@ def main():
     sp.add_parser("report"); sp.add_parser("status")
     a = ap.parse_args()
     {"update": cmd_update, "candidates": cmd_candidates, "place": cmd_place, "review": cmd_review,
-     "report": cmd_report, "status": cmd_status}[a.cmd](a)
+     "report": cmd_report, "status": cmd_status, "skip": cmd_skip, "shadow": cmd_shadow}[a.cmd](a)
 
 
 if __name__ == "__main__":

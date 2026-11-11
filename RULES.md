@@ -32,7 +32,8 @@ Account: $50,000 paper money · brokerage $5.50 each way ($11 round trip) · pap
 18. Daily review tags each closed trade as process error (a rule or check failed) or bad luck (rules followed). Lessons go in `lessons.md`, read first every run.
 19. Settings in `params.json` may change only after ≥ 8 closed trades show a pattern, within the bounds in `engine.py`, at most one change per week, each recorded in `changelog.md`. Rules 1–17 above are never changed by the system.
 20. Daily report after the close: value, today's P&L, total P&L, trades, open positions, breaches.
-21. Judge after ≥ 30 closed trades, against holding an ASX 200 ETF over the same period.
+21. Shadow journal: rejected candidates (by filter, gate, debate, calendar, sector or no slot) are tracked as if taken, under the same fill and exit rules, and measured in R. This shows whether each filter protects the account or just costs trades. It informs the 30-trade review only; it never changes rules automatically.
+22. Judge after ≥ 30 closed trades, against holding an ASX 200 ETF over the same period.
 
 ## How fills and exits are decided (no "stop first" assumption)
 - The run happens after the close, but it replays the day minute by minute using 1-minute prices (last 7 trading days) or 5-minute prices (up to 60 days). Whichever of the stop or the target was actually reached first is the exit, with its time recorded.
