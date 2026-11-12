@@ -1,4 +1,127 @@
 {
- "date": "2026-11-11",
- "candidates": []
+ "date": "2026-11-12",
+ "candidates": [
+  {
+   "code": "ASX",
+   "status": "wait: price is 1.1 ATR above the zone, place a resting limit or alert",
+   "last_close": 67.38999938964844,
+   "entry_limit": 65.66,
+   "stop": 63.95,
+   "target": 69.08,
+   "risk_per_share": 1.71,
+   "stop_atr": 1.51,
+   "atr": 1.1355,
+   "qty": 51,
+   "value": 3348.66,
+   "risk_dollars": 98.72,
+   "drag_pct": 0.33,
+   "zone": {
+    "kind": "fair_value_gap",
+    "low": 65.2,
+    "high": 66.115,
+    "confluence": [
+     "fair_value_gap",
+     "ema20",
+     "fair_value_gap",
+     "order_block"
+    ]
+   },
+   "resistance": null,
+   "swing_low": 64.66999816894531,
+   "odds": {
+    "p_target_first": 0.3651,
+    "p_stop_first": 0.5648,
+    "expected_R": 0.187
+   },
+   "odds_neutral": {
+    "p_target_first": 0.3176,
+    "p_stop_first": 0.6116,
+    "expected_R": 0.031
+   },
+   "scan": {
+    "score": 90,
+    "setup": "watch",
+    "price": 67.39,
+    "rsi": 70.0,
+    "atr_pct": 1.68,
+    "roc60_pct": 17.3,
+    "rs60_vs_index_pct": 16.6,
+    "dist_52w_high_pct": -0.5,
+    "vol_ratio": 0.67,
+    "turnover_aud": 43325499,
+    "trend": "bullish",
+    "parts": {
+     "trend": 35,
+     "momentum": 25,
+     "structure": 20,
+     "volume_liquidity": 10
+    },
+    "ticker": "ASX"
+   },
+   "notes": [
+    "stop widened to 1.0 ATR below entry so ordinary noise does not trigger it",
+    "no swing-high resistance above price in the lookback (price discovery), targets are R-multiples only"
+   ]
+  },
+  {
+   "code": "MVW",
+   "status": "wait: price is 0.5 ATR above the zone, place a resting limit or alert",
+   "last_close": 40.709999084472656,
+   "entry_limit": 40.41,
+   "stop": 39.23,
+   "target": 42.77,
+   "risk_per_share": 1.18,
+   "stop_atr": 2.71,
+   "atr": 0.4355,
+   "qty": 74,
+   "value": 2990.34,
+   "risk_dollars": 99.06,
+   "drag_pct": 0.37,
+   "zone": {
+    "kind": "fair_value_gap",
+    "low": 40.31,
+    "high": 40.5,
+    "confluence": [
+     "fair_value_gap",
+     "fair_value_gap"
+    ]
+   },
+   "resistance": null,
+   "swing_low": 39.279998779296875,
+   "odds": {
+    "p_target_first": 0.1144,
+    "p_stop_first": 0.2962,
+    "expected_R": 0.176
+   },
+   "odds_neutral": {
+    "p_target_first": 0.0949,
+    "p_stop_first": 0.3295,
+    "expected_R": 0.056
+   },
+   "scan": {
+    "score": 90,
+    "setup": "watch",
+    "price": 40.71,
+    "rsi": 69.3,
+    "atr_pct": 1.07,
+    "roc60_pct": 3.5,
+    "rs60_vs_index_pct": 2.8,
+    "dist_52w_high_pct": -0.4,
+    "vol_ratio": 0.96,
+    "turnover_aud": 3545255,
+    "trend": "bullish",
+    "parts": {
+     "trend": 35,
+     "momentum": 25,
+     "structure": 20,
+     "volume_liquidity": 10
+    },
+    "ticker": "MVW"
+   },
+   "notes": [
+    "stop widened to 1.0 ATR below entry so ordinary noise does not trigger it",
+    "no swing-high resistance above price in the lookback (price discovery), targets are R-multiples only"
+   ]
+  }
+ ]
 }
