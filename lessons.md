@@ -19,3 +19,8 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - No closed trades; nothing to tag. ASX order cancelled a second time: opened 67.75, more than 0.5 ATR above the limit. Rules followed (open filter working, as flagged yesterday). Not an error; ASX now fails rule 16 resistance (1.0R), so no re-entry.
 - 0 of 61 shortlisted passed: all 16 checked failed rule 16 resistance (0.5R to 1.7R). No candidates, so no news/debate reviews ran. Market filter open (XJO 9082 vs EMA50 8893).
 - Benchmark IOZ fell to $49,687 since 11 Nov; account flat at $50,000, so +$313 ahead by sitting in cash. Not evidence of skill yet.
+
+## 2026-11-16
+- No closed trades; nothing to tag. No pending orders were live. 7 shadow orders cancelled on the open filter (opened > 0.5 ATR above their limits): pullback limits keep getting skipped by gap-ups. Shadow journal will show whether that filter costs anything; no closed shadows yet.
+- 1 of 65 shortlisted passed (MVW); 15 checked failed rule 16 resistance (0.1R to 1.2R), SUN failed the $2,200 minimum. MVW skipped on debate (+0.67, no edge): index ETF with weak momentum, target-first only 10.6% in replays. Calendar was clear (distribution ex-date early Jan). Same verdict as 12 Nov, so consistent.
+- Market filter open but softening (XJO 9045 vs EMA50 8899, down from 9082). IOZ line $49,496; account +$504 ahead by holding cash. Still not evidence of skill.
