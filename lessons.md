@@ -24,3 +24,9 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - No closed trades; nothing to tag. No pending orders were live. 7 shadow orders cancelled on the open filter (opened > 0.5 ATR above their limits): pullback limits keep getting skipped by gap-ups. Shadow journal will show whether that filter costs anything; no closed shadows yet.
 - 1 of 65 shortlisted passed (MVW); 15 checked failed rule 16 resistance (0.1R to 1.2R), SUN failed the $2,200 minimum. MVW skipped on debate (+0.67, no edge): index ETF with weak momentum, target-first only 10.6% in replays. Calendar was clear (distribution ex-date early Jan). Same verdict as 12 Nov, so consistent.
 - Market filter open but softening (XJO 9045 vs EMA50 8899, down from 9082). IOZ line $49,496; account +$504 ahead by holding cash. Still not evidence of skill.
+
+## 2026-11-17
+- No closed trades; nothing to tag. No pending orders were live.
+- Market filter (rule 11) shut: ASX 200 closed 8883 below its 50-day EMA 8898, after softening for two days (9082 → 9045 → 8883). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. The report's "Gates: OPEN" line reflects loss/risk budgets only, not the market filter.
+- First closed shadow: RHC (resistance reject) stopped at 10:14 for -1.01R. One data point; no conclusion.
+- IOZ line $48,596; account +$1,404 ahead by holding cash. Still not evidence of skill.

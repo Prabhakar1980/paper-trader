@@ -33,6 +33,14 @@
    "positions": 0,
    "orders": 0,
    "benchmark": 49495.78
+  },
+  {
+   "date": "2026-11-17",
+   "equity": 50000.0,
+   "cash": 50000.0,
+   "positions": 0,
+   "orders": 0,
+   "benchmark": 48596.35
   }
  ],
  "positions": [],
@@ -103,7 +111,7 @@
    "cancel_date": "2026-11-13"
   }
  ],
- "last_processed": "2026-11-16",
+ "last_processed": "2026-11-17",
  "halted": false,
  "halt_reason": null,
  "breaches": [],
@@ -111,63 +119,6 @@
  "created": "2026-11-11",
  "shadow": {
   "orders": [
-   {
-    "id": "S0033",
-    "code": "SOL",
-    "qty": 35,
-    "limit": 48.02,
-    "stop": 45.5,
-    "target": 53.06,
-    "atr": 0.8687,
-    "sector": "",
-    "placed": "2026-11-13",
-    "days_live": 1,
-    "thesis": "resistance 49.430 leaves 0.6R (< 2.0R)",
-    "review": {
-     "category": "resistance",
-     "why": "resistance 49.430 leaves 0.6R (< 2.0R)",
-     "expected_R": 0.285,
-     "score": 90
-    }
-   },
-   {
-    "id": "S0034",
-    "code": "ARG",
-    "qty": 523,
-    "limit": 9.55,
-    "stop": 9.39,
-    "target": 9.87,
-    "atr": 0.0969,
-    "sector": "",
-    "placed": "2026-11-16",
-    "days_live": 0,
-    "thesis": "resistance 9.570 leaves 0.1R (< 2.0R)",
-    "review": {
-     "category": "resistance",
-     "why": "resistance 9.570 leaves 0.1R (< 2.0R)",
-     "expected_R": 0.077,
-     "score": 100
-    }
-   },
-   {
-    "id": "S0035",
-    "code": "BEN",
-    "qty": 287,
-    "limit": 10.64,
-    "stop": 10.34,
-    "target": 11.24,
-    "atr": 0.1984,
-    "sector": "",
-    "placed": "2026-11-16",
-    "days_live": 0,
-    "thesis": "resistance 10.915 leaves 0.9R (< 2.0R)",
-    "review": {
-     "category": "resistance",
-     "why": "resistance 10.915 leaves 0.9R (< 2.0R)",
-     "expected_R": 0.061,
-     "score": 95
-    }
-   },
    {
     "id": "S0036",
     "code": "CGF",
@@ -178,7 +129,7 @@
     "atr": 0.209,
     "sector": "",
     "placed": "2026-11-16",
-    "days_live": 0,
+    "days_live": 1,
     "thesis": "resistance 12.140 leaves 0.6R (< 2.0R)",
     "review": {
      "category": "resistance",
@@ -197,7 +148,7 @@
     "atr": 0.8727,
     "sector": "",
     "placed": "2026-11-16",
-    "days_live": 0,
+    "days_live": 1,
     "thesis": "resistance 46.500 leaves 0.6R (< 2.0R)",
     "review": {
      "category": "resistance",
@@ -207,78 +158,154 @@
     }
    },
    {
-    "id": "S0038",
+    "id": "S0042",
+    "code": "IVV",
+    "qty": 76,
+    "limit": 72.92,
+    "stop": 71.77,
+    "target": 75.22,
+    "atr": 0.7649,
+    "sector": "",
+    "placed": "2026-11-17",
+    "days_live": 0,
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.247,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0043",
     "code": "ASX",
-    "qty": 52,
+    "qty": 53,
     "limit": 65.66,
-    "stop": 63.99,
-    "target": 69.0,
-    "atr": 1.1124,
+    "stop": 64.01,
+    "target": 68.96,
+    "atr": 1.0983,
     "sector": "",
-    "placed": "2026-11-16",
+    "placed": "2026-11-17",
     "days_live": 0,
-    "thesis": "resistance 67.280 leaves 1.0R (< 2.0R)",
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
     "review": {
-     "category": "resistance",
-     "why": "resistance 67.280 leaves 1.0R (< 2.0R)",
-     "expected_R": 0.208,
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.174,
      "score": 90
     }
    },
    {
-    "id": "S0039",
-    "code": "SUN",
-    "qty": 62,
-    "limit": 20.52,
-    "stop": 19.1,
-    "target": 23.36,
-    "atr": 0.3906,
+    "id": "S0044",
+    "code": "MPL",
+    "qty": 494,
+    "limit": 5.25,
+    "stop": 5.08,
+    "target": 5.59,
+    "atr": 0.1075,
     "sector": "",
-    "placed": "2026-11-16",
+    "placed": "2026-11-17",
     "days_live": 0,
-    "thesis": "position $1272 below $2200 (brokerage drag)",
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
     "review": {
-     "category": "size/brokerage",
-     "why": "position $1272 below $2200 (brokerage drag)",
-     "expected_R": 0.108,
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.094,
      "score": 90
     }
    },
    {
-    "id": "S0040",
+    "id": "S0045",
     "code": "BOQ",
     "qty": 444,
     "limit": 6.94,
     "stop": 6.75,
     "target": 7.32,
-    "atr": 0.1222,
+    "atr": 0.1214,
     "sector": "",
-    "placed": "2026-11-16",
+    "placed": "2026-11-17",
     "days_live": 0,
-    "thesis": "resistance 7.100 leaves 0.8R (< 2.0R)",
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
     "review": {
-     "category": "resistance",
-     "why": "resistance 7.100 leaves 0.8R (< 2.0R)",
-     "expected_R": 0.136,
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.099,
      "score": 90
     }
    },
    {
-    "id": "S0041",
-    "code": "RWC",
-    "qty": 593,
-    "limit": 4.54,
-    "stop": 4.4,
-    "target": 4.82,
-    "atr": 0.0903,
+    "id": "S0046",
+    "code": "RMD",
+    "qty": 80,
+    "limit": 34.93,
+    "stop": 33.83,
+    "target": 37.13,
+    "atr": 0.732,
     "sector": "",
-    "placed": "2026-11-16",
+    "placed": "2026-11-17",
     "days_live": 0,
-    "thesis": "resistance 4.650 leaves 0.8R (< 2.0R)",
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
     "review": {
-     "category": "resistance",
-     "why": "resistance 4.650 leaves 0.8R (< 2.0R)",
-     "expected_R": 0.099,
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.049,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0047",
+    "code": "CBA",
+    "qty": 17,
+    "limit": 165.43,
+    "stop": 160.23,
+    "target": 175.83,
+    "atr": 3.4638,
+    "sector": "",
+    "placed": "2026-11-17",
+    "days_live": 0,
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.104,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0048",
+    "code": "TLC",
+    "qty": 556,
+    "limit": 5.39,
+    "stop": 5.24,
+    "target": 5.69,
+    "atr": 0.0982,
+    "sector": "",
+    "placed": "2026-11-17",
+    "days_live": 0,
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.007,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0049",
+    "code": "FPH",
+    "qty": 33,
+    "limit": 38.79,
+    "stop": 36.16,
+    "target": 44.05,
+    "atr": 0.6996,
+    "sector": "",
+    "placed": "2026-11-17",
+    "days_live": 0,
+    "thesis": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8883.2 below its 50-day EMA 8898.1",
+     "expected_R": 0.204,
      "score": 90
     }
    }
@@ -305,11 +332,11 @@
     "entry_resolution": "1m",
     "init_stop": 38.21,
     "init_risk_per_share": 0.94,
-    "bars_held": 2,
-    "mfe": 39.900001525878906,
+    "bars_held": 3,
+    "mfe": 40.04999923706055,
     "mae": 39.025001525878906,
     "be_moved": false,
-    "last_close": 39.810001373291016
+    "last_close": 39.4900016784668
    },
    {
     "id": "S0013",
@@ -332,38 +359,11 @@
     "entry_resolution": "1m",
     "init_stop": 39.41,
     "init_risk_per_share": 2.49,
-    "bars_held": 2,
-    "mfe": 42.29999923706055,
+    "bars_held": 3,
+    "mfe": 42.41999816894531,
     "mae": 41.689998626708984,
     "be_moved": false,
-    "last_close": 42.189998626708984
-   },
-   {
-    "id": "S0020",
-    "code": "RHC",
-    "qty": 62,
-    "stop": 53.84,
-    "target": 58.07,
-    "atr": 0.9371,
-    "sector": "",
-    "thesis": "resistance 55.650 leaves 0.3R (< 2.0R)",
-    "review": {
-     "category": "resistance",
-     "why": "resistance 55.650 leaves 0.3R (< 2.0R)",
-     "expected_R": 0.424,
-     "score": 90
-    },
-    "entry": 55.11,
-    "entry_date": "2026-11-13",
-    "entry_time": "11:00",
-    "entry_resolution": "1m",
-    "init_stop": 53.84,
-    "init_risk_per_share": 1.27,
-    "bars_held": 1,
-    "mfe": 55.290000915527344,
-    "mae": 54.244998931884766,
-    "be_moved": false,
-    "last_close": 54.95000076293945
+    "last_close": 42.040000915527344
    },
    {
     "id": "S0021",
@@ -386,11 +386,11 @@
     "entry_resolution": "1m",
     "init_stop": 13.79,
     "init_risk_per_share": 0.51,
-    "bars_held": 1,
-    "mfe": 14.595000267028809,
-    "mae": 14.239999771118164,
+    "bars_held": 2,
+    "mfe": 14.649999618530273,
+    "mae": 14.15999984741211,
     "be_moved": false,
-    "last_close": 14.5600004196167
+    "last_close": 14.239999771118164
    },
    {
     "id": "S0025",
@@ -413,14 +413,127 @@
     "entry_resolution": "1m",
     "init_stop": 39.23,
     "init_risk_per_share": 1.16,
-    "bars_held": 1,
+    "bars_held": 2,
     "mfe": 40.54999923706055,
-    "mae": 40.34000015258789,
+    "mae": 39.81999969482422,
     "be_moved": false,
-    "last_close": 40.529998779296875
+    "last_close": 39.81999969482422
+   },
+   {
+    "id": "S0033",
+    "code": "SOL",
+    "qty": 35,
+    "stop": 45.5,
+    "target": 53.06,
+    "atr": 0.8687,
+    "sector": "",
+    "thesis": "resistance 49.430 leaves 0.6R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 49.430 leaves 0.6R (< 2.0R)",
+     "expected_R": 0.285,
+     "score": 90
+    },
+    "entry": 47.88,
+    "entry_date": "2026-11-17",
+    "entry_time": "11:00",
+    "entry_resolution": "1m",
+    "init_stop": 45.5,
+    "init_risk_per_share": 2.38,
+    "bars_held": 0,
+    "mfe": 47.90999984741211,
+    "mae": 47.20000076293945,
+    "be_moved": false
+   },
+   {
+    "id": "S0034",
+    "code": "ARG",
+    "qty": 523,
+    "stop": 9.39,
+    "target": 9.87,
+    "atr": 0.0969,
+    "sector": "",
+    "thesis": "resistance 9.570 leaves 0.1R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 9.570 leaves 0.1R (< 2.0R)",
+     "expected_R": 0.077,
+     "score": 100
+    },
+    "entry": 9.49,
+    "entry_date": "2026-11-17",
+    "entry_time": "11:03",
+    "entry_resolution": "1m",
+    "init_stop": 9.39,
+    "init_risk_per_share": 0.1,
+    "bars_held": 0,
+    "mfe": 9.489999771118164,
+    "mae": 9.430000305175781,
+    "be_moved": false
+   },
+   {
+    "id": "S0039",
+    "code": "SUN",
+    "qty": 62,
+    "stop": 19.1,
+    "target": 23.36,
+    "atr": 0.3906,
+    "sector": "",
+    "thesis": "position $1272 below $2200 (brokerage drag)",
+    "review": {
+     "category": "size/brokerage",
+     "why": "position $1272 below $2200 (brokerage drag)",
+     "expected_R": 0.108,
+     "score": 90
+    },
+    "entry": 20.52,
+    "entry_date": "2026-11-17",
+    "entry_time": "11:15",
+    "entry_resolution": "1m",
+    "init_stop": 19.1,
+    "init_risk_per_share": 1.42,
+    "bars_held": 0,
+    "mfe": 20.579999923706055,
+    "mae": 20.3700008392334,
+    "be_moved": false
    }
   ],
-  "closed": [],
+  "closed": [
+   {
+    "id": "S0020",
+    "code": "RHC",
+    "qty": 62,
+    "stop": 53.84,
+    "target": 58.07,
+    "atr": 0.9371,
+    "sector": "",
+    "thesis": "resistance 55.650 leaves 0.3R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 55.650 leaves 0.3R (< 2.0R)",
+     "expected_R": 0.424,
+     "score": 90
+    },
+    "entry": 55.11,
+    "entry_date": "2026-11-13",
+    "entry_time": "11:00",
+    "entry_resolution": "1m",
+    "init_stop": 53.84,
+    "init_risk_per_share": 1.27,
+    "bars_held": 2,
+    "mfe": 55.290000915527344,
+    "mae": 52.869998931884766,
+    "be_moved": false,
+    "last_close": 54.95000076293945,
+    "exit_date": "2026-11-17",
+    "exit": 53.83,
+    "reason": "stop",
+    "pnl": -90.36,
+    "exit_time": "10:14",
+    "exit_resolution": "1m bars: stop reached first at 10:14",
+    "R": -1.01
+   }
+  ],
   "cancelled": [
    {
     "id": "S0001",
@@ -988,9 +1101,93 @@
     },
     "cancel_reason": "opened 3.990, more than 0.5 ATR above the limit",
     "cancel_date": "2026-11-16"
+   },
+   {
+    "id": "S0035",
+    "code": "BEN",
+    "qty": 287,
+    "limit": 10.64,
+    "stop": 10.34,
+    "target": 11.24,
+    "atr": 0.1984,
+    "sector": "",
+    "placed": "2026-11-16",
+    "days_live": 1,
+    "thesis": "resistance 10.915 leaves 0.9R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 10.915 leaves 0.9R (< 2.0R)",
+     "expected_R": 0.061,
+     "score": 95
+    },
+    "cancel_reason": "opened 10.860, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-17"
+   },
+   {
+    "id": "S0038",
+    "code": "ASX",
+    "qty": 52,
+    "limit": 65.66,
+    "stop": 63.99,
+    "target": 69.0,
+    "atr": 1.1124,
+    "sector": "",
+    "placed": "2026-11-16",
+    "days_live": 1,
+    "thesis": "resistance 67.280 leaves 1.0R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 67.280 leaves 1.0R (< 2.0R)",
+     "expected_R": 0.208,
+     "score": 90
+    },
+    "cancel_reason": "opened 66.700, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-17"
+   },
+   {
+    "id": "S0040",
+    "code": "BOQ",
+    "qty": 444,
+    "limit": 6.94,
+    "stop": 6.75,
+    "target": 7.32,
+    "atr": 0.1222,
+    "sector": "",
+    "placed": "2026-11-16",
+    "days_live": 1,
+    "thesis": "resistance 7.100 leaves 0.8R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 7.100 leaves 0.8R (< 2.0R)",
+     "expected_R": 0.136,
+     "score": 90
+    },
+    "cancel_reason": "opened 7.070, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-17"
+   },
+   {
+    "id": "S0041",
+    "code": "RWC",
+    "qty": 593,
+    "limit": 4.54,
+    "stop": 4.4,
+    "target": 4.82,
+    "atr": 0.0903,
+    "sector": "",
+    "placed": "2026-11-16",
+    "days_live": 1,
+    "thesis": "resistance 4.650 leaves 0.8R (< 2.0R)",
+    "review": {
+     "category": "resistance",
+     "why": "resistance 4.650 leaves 0.8R (< 2.0R)",
+     "expected_R": 0.099,
+     "score": 90
+    },
+    "cancel_reason": "opened 4.620, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-17"
    }
   ],
-  "next_id": 42
+  "next_id": 50
  },
  "benchmark": {
   "code": "IOZ",
