@@ -30,3 +30,9 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - Market filter (rule 11) shut: ASX 200 closed 8883 below its 50-day EMA 8898, after softening for two days (9082 → 9045 → 8883). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. The report's "Gates: OPEN" line reflects loss/risk budgets only, not the market filter.
 - First closed shadow: RHC (resistance reject) stopped at 10:14 for -1.01R. One data point; no conclusion.
 - IOZ line $48,596; account +$1,404 ahead by holding cash. Still not evidence of skill.
+
+## 2026-11-18
+- No closed trades; nothing to tag. No pending orders were live.
+- Market filter (rule 11) still shut: ASX 200 closed 8822 below its 50-day EMA 8895 (second day below; 9082 → 9045 → 8883 → 8822). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal.
+- Second closed shadow: ARG (resistance reject) stopped at 11:07. Resistance shadows now 2 closed, both stops, avg -1.06R. Too few to judge; supports keeping rule 16 so far.
+- IOZ line $48,256; account +$1,744 ahead by holding cash. Still not evidence of skill.
