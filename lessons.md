@@ -48,3 +48,10 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - Market filter (rule 11) shut for a fourth day: ASX 200 closed 8593 below its 50-day EMA 8877 (9082 → 9045 → 8883 → 8822 → 8730 → 8593). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. Report's "Gates: OPEN" covers loss/risk budgets only.
 - Shadows: BXB filled at 11:00 and stopped at 13:10; ANZ and PMV stopped; IVV gap-stopped. Market-filter shadows now 2 closed, both stops (avg -1.06R); resistance 5 closed, all stops (avg -1.04R). In a falling market the filters are blocking losers so far. Still under 10 per category, so no conclusion.
 - IOZ line $47,029; account +$2,971 ahead by holding cash. Still not evidence of skill.
+
+## 2026-11-23
+- No closed trades; nothing to tag. No pending orders were live.
+- Market filter (rule 11) shut for a fifth day: ASX 200 closed 8571 below its 50-day EMA 8865 (9082 → … → 8593 → 8571). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal.
+- Shadows: CBA, SIG, RWC, INA, GPT filled (afternoon fills); TCL, TLC, ORG, RGN, QBE cancelled on the open filter. No new shadow closes today.
+- Process note (housekeeping, not a trade error): `candidates` was run twice this session and the second run added 3 extra gate-shut shadows (TLS, RMD, IAG) beyond the 8-a-day cap; removed them so the journal stays consistent. Run `candidates` once per day.
+- IOZ line $46,893; account +$3,107 ahead by holding cash. Still not evidence of skill.
