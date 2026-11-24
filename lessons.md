@@ -55,3 +55,9 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - Shadows: CBA, SIG, RWC, INA, GPT filled (afternoon fills); TCL, TLC, ORG, RGN, QBE cancelled on the open filter. No new shadow closes today.
 - Process note (housekeeping, not a trade error): `candidates` was run twice this session and the second run added 3 extra gate-shut shadows (TLS, RMD, IAG) beyond the 8-a-day cap; removed them so the journal stays consistent. Run `candidates` once per day.
 - IOZ line $46,893; account +$3,107 ahead by holding cash. Still not evidence of skill.
+
+## 2026-11-24
+- No closed trades; nothing to tag. No pending orders were live.
+- Market filter (rule 11) shut for a sixth day, but the ASX 200 bounced strongly: closed 8726 vs its 50-day EMA 8860 (8571 → 8726, gap to EMA narrowed from 294 to 134 points). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. `candidates` run once only.
+- Shadows: RWC (market-filter shadow) hit target at the open, first shadow winner; market-filter shadows now 3 closed, avg +0.5R. APA filled at 11:11; 8 shadow orders cancelled on the open filter after the gap-up. Still under 10 per category, so no conclusion.
+- IOZ line $47,738; account +$2,262 ahead by holding cash (gap narrowed as the market bounced). Still not evidence of skill.
