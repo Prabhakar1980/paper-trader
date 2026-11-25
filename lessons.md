@@ -61,3 +61,9 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - Market filter (rule 11) shut for a sixth day, but the ASX 200 bounced strongly: closed 8726 vs its 50-day EMA 8860 (8571 → 8726, gap to EMA narrowed from 294 to 134 points). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. `candidates` run once only.
 - Shadows: RWC (market-filter shadow) hit target at the open, first shadow winner; market-filter shadows now 3 closed, avg +0.5R. APA filled at 11:11; 8 shadow orders cancelled on the open filter after the gap-up. Still under 10 per category, so no conclusion.
 - IOZ line $47,738; account +$2,262 ahead by holding cash (gap narrowed as the market bounced). Still not evidence of skill.
+
+## 2026-11-25
+- No closed trades; nothing to tag. No pending orders were live.
+- Market filter (rule 11) shut for a seventh day: ASX 200 closed 8692 below its 50-day EMA 8853 (8571 → 8726 → 8692; yesterday's bounce faded, gap to EMA 161 points). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. `candidates` run once only.
+- Shadows: IVV, ALL and TPG filled; MTS, TLC, RMD, BOQ, AIA cancelled on the open filter. No new shadow closes; still under 10 per category, so no conclusion.
+- IOZ line $47,561; account +$2,439 ahead by holding cash. Still not evidence of skill.
