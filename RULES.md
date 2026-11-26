@@ -57,3 +57,14 @@ If a held stock opens more than 40% away from its previous close, or Yahoo rewri
 - With no intraday data at all (run missed for more than 60 days), daily prices are used and the result is tagged "daily data only".
 - **Realistic fills:** a buy limit fills only if the price trades at least one tick *below* it (a touch isn't enough, because of the queue). A target sell needs a trade one tick *above* it. Fills are at the limit, or the bar's open if that's better.
 - **Stop slippage:** stops fill one tick below the stop price (or at the open on a gap). Position sizing includes this tick, so the $100 cap holds.
+
+## US book (added 27 Nov 2026)
+A separate **US$50,000 paper** account for S&P 500 stocks, run with `python engine.py --market us ...` and kept in `us/` (own state, params, lessons, changelog and reports). Rules 1–22 and the go-live criteria apply unchanged, in US dollars. Only the exchange mechanics differ:
+- Rule 11 market filter: the S&P 500 (^GSPC) must close above its 50-day EMA.
+- Rule 13a: no fills before 10:30am New York time (the first hour).
+- Brokerage: US$1.00 each way ($2 round trip). The $2,200 minimum position from rule 12 is kept so the two books stay comparable.
+- Ticks: $0.01, or $0.0001 below $1.
+- Rule 14: US companies report quarterly and usually pay quarterly dividends; check the next earnings date and ex-dividend date by web search (news.py only reads the ASX feed).
+- Rule 21 benchmark: a US$50k line in SPY (price only), started 25 Nov 2026 at $716.70. Go-live criterion 4 compares the US book with SPY.
+- Rule 6: GICS industry groups are counted within each book separately.
+The two books are judged separately; a US result never counts toward the ASX go-live checklist.

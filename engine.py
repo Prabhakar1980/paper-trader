@@ -24,7 +24,36 @@ import math
 import os
 import sys
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+# ---------- market selection: `--market asx` (default) or `--market us` ----------
+# Each market is a separate paper book with its own folder, state, params, lessons and reports.
+# The fixed rules are the same; only exchange mechanics differ (index, benchmark, ticks, hours, costs).
+MARKETS = {
+    "asx": {"dir": HERE, "label": "ASX", "ccy": "A$", "index": "^AXJO", "index_name": "ASX 200",
+            "benchmark": "IOZ", "benchmark_name": "ASX 200 ETF", "brokerage_per_side": 5.50,
+            "entry_not_before": "11:00", "tz": "Sydney"},
+    "us": {"dir": os.path.join(HERE, "us"), "label": "US", "ccy": "US$", "index": "^GSPC", "index_name": "S&P 500",
+           "benchmark": "SPY", "benchmark_name": "S&P 500 ETF", "brokerage_per_side": 1.00,
+           "entry_not_before": "10:30", "tz": "New York"},
+}
+
+
+def _pop_market(argv):
+    m = os.environ.get("PAPER_MARKET", "asx")
+    for i, x in enumerate(list(argv)):
+        if x == "--market" and i + 1 < len(argv):
+            m = argv[i + 1]; del argv[i:i + 2]; break
+        if x.startswith("--market="):
+            m = x.split("=", 1)[1]; del argv[i]; break
+    if m not in MARKETS:
+        sys.exit("unknown market %s (choose asx or us)" % m)
+    return m
+
+
+MARKET = _pop_market(sys.argv)
+MK = MARKETS[MARKET]
+ROOT = MK["dir"]
 STATE = os.path.join(ROOT, "state.json")
 PARAMS = os.path.join(ROOT, "params.json")
 
@@ -45,10 +74,31 @@ import entry as E  # noqa: E402
 import scan as SC  # noqa: E402
 import timemachine as TM  # noqa: E402
 
+if MARKET == "us":
+    # US mechanics: plain Yahoo symbols (BRK.B -> BRK-B), 1-cent ticks ($0.0001 below $1, Reg NMS)
+    def _us_ticker(t):
+        t = t.strip().upper()
+        return t if t.startswith("^") else t.replace(".", "-")
+
+    def _us_tick(p):
+        return 0.0001 if p < 1.0 else 0.01
+
+    C.norm_ticker = _us_ticker
+    C.tick_size = _us_tick
+    E.tick_size = _us_tick       # entry.py imported these by name
+    E.round_tick = C.round_tick  # C.round_tick now uses the US tick
+
+    def _us_universe():
+        import csv
+        with open(os.path.join(ROOT, "universe.csv")) as f:
+            return [r["Symbol"].strip() for r in csv.DictReader(f) if r.get("Symbol")]
+
+    SC.listed_universe = _us_universe
+
 # ---------- fixed rules (user's rulebook v1; never auto-tuned) ----------
 RULES = {
-    "start_equity": 50000.0,
-    "brokerage_per_side": 5.50,
+    "start_equity": 50000.0,        # A$50,000 (ASX book) or US$50,000 (US book)
+    "brokerage_per_side": MK["brokerage_per_side"],
     "daily_loss_limit": 250.0,      # rule 1
     "weekly_loss_limit": 500.0,     # rule 2
     "max_drawdown": 1500.0,         # rule 3
@@ -63,9 +113,9 @@ RULES = {
     "max_pct_avg_volume": 1.0,
     "max_order_gap_atr": 0.5,       # rule 13
     "cooldown_days": 5,             # rule 15
-    "entry_not_before": "11:00",    # rule 13a: no entries in the first hour (Sydney time)
-    "index": "^AXJO",
-    "benchmark": "IOZ",             # rule 22: iShares ASX 200 ETF, price only
+    "entry_not_before": MK["entry_not_before"],  # rule 13a: no entries in the first hour (exchange time)
+    "index": MK["index"],
+    "benchmark": MK["benchmark"],   # rule 21: IOZ (ASX book) or SPY (US book), price only
     "corp_action_jump": 0.40,       # overnight move that flags a possible split/consolidation
     "index_ema": 50,                # rule 11
 }
@@ -619,7 +669,7 @@ def cmd_candidates(a):
     g = budgets(s, date)
     mf = market_filter()
     if not mf["ok"]:
-        g["reasons"].append("market filter: ASX 200 %.1f below its 50-day EMA %.1f" % (mf["index_close"], mf["ema50"]))
+        g["reasons"].append("market filter: %s %.1f below its 50-day EMA %.1f" % (MK["index_name"], mf["index_close"], mf["ema50"]))
         g["open"] = False
     out = {"gates": g, "market_filter": mf, "candidates": [], "rejected": [], "shadowed": []}
     gate_why = None if g["open"] else "gate: " + "; ".join(g["reasons"])
@@ -757,7 +807,7 @@ def cmd_report(a):
     allc = s["closed"]
     wins = sum(t["pnl"] > 0 for t in allc)
     gl = go_live_status(s)
-    L = ["# Paper account: %s" % d, ""]
+    L = ["# Paper account: %s" % d if MARKET == "asx" else "# %s paper account (%s): %s" % (MK["label"], MK["ccy"], d), ""]
     if gl["review30_due"]:
         L += ["**30-TRADE REVIEW DUE**: time to sit down with Prabhakar (see RULES.md, go-live criteria).", ""]
     if any(p.get("frozen") for p in s["positions"]):
@@ -809,7 +859,7 @@ GO_LIVE = [
     ("at least 30 closed trades", lambda s, x: x["closed"] >= 30),
     ("net P&L after brokerage is positive", lambda s, x: x["net_pnl"] > 0),
     ("average R is positive", lambda s, x: (x["avg_R"] or 0) > 0),
-    ("account beats the ASX 200 ETF line", lambda s, x: x["vs_benchmark"] is not None and x["vs_benchmark"] > 0),
+    ("account beats the %s line" % MK["benchmark_name"], lambda s, x: x["vs_benchmark"] is not None and x["vs_benchmark"] > 0),
     ("drawdown halt never triggered", lambda s, x: not s.get("ever_halted")),
     ("no rule breaches in the last 10 trades", lambda s, x: x["breaches_last10"] == 0),
     ("no process errors in the last 10 trades", lambda s, x: x["process_errors_last10"] == 0),

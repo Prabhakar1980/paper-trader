@@ -11,3 +11,4 @@
 | 2026-11-11 | benchmark | added IOZ line from $36.69 (11 Nov close) | Rule 21 |
 | 2026-11-11 | go-live | 7 criteria + 30-trade review flag + trade tagging | Agreed with Prabhakar |
 | 2026-11-11 | corporate actions | freeze on >40% open gap or rewritten price history | Split/consolidation safety |
+| 2026-11-27 | engine | single market → `--market asx` (default) / `--market us` | Prabhakar asked to add the US market as a separate account. ASX book unchanged; US book lives in `us/` |

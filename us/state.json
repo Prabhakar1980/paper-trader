@@ -1,0 +1,190 @@
+{
+ "cash": 50000.0,
+ "peak_equity": 50000.0,
+ "equity_history": [
+  {
+   "date": "2026-11-25",
+   "equity": 50000.0,
+   "cash": 50000.0,
+   "positions": 0,
+   "orders": 0,
+   "benchmark": 50000.0
+  }
+ ],
+ "positions": [],
+ "orders": [],
+ "closed": [],
+ "cancelled": [],
+ "last_processed": "2026-11-25",
+ "halted": false,
+ "halt_reason": null,
+ "breaches": [],
+ "next_id": 1,
+ "created": "2026-11-27",
+ "shadow": {
+  "orders": [
+   {
+    "id": "S0001",
+    "code": "CB",
+    "qty": 9,
+    "limit": 374.26,
+    "stop": 364.06,
+    "target": 394.66,
+    "atr": 6.7954,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.328,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0002",
+    "code": "KO",
+    "qty": 23,
+    "limit": 97.01,
+    "stop": 92.81,
+    "target": 105.41,
+    "atr": 1.8464,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.369,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0003",
+    "code": "AEE",
+    "qty": 34,
+    "limit": 111.81,
+    "stop": 108.97,
+    "target": 117.49,
+    "atr": 1.8887,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.126,
+     "score": 95
+    }
+   },
+   {
+    "id": "S0004",
+    "code": "MCK",
+    "qty": 1,
+    "limit": 1040.68,
+    "stop": 951.5,
+    "target": 1219.04,
+    "atr": 25.4873,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.152,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0005",
+    "code": "PG",
+    "qty": 19,
+    "limit": 171.59,
+    "stop": 166.57,
+    "target": 181.63,
+    "atr": 3.1671,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.165,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0006",
+    "code": "CAH",
+    "qty": 2,
+    "limit": 277.04,
+    "stop": 242.84,
+    "target": 345.44,
+    "atr": 6.4744,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.163,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0007",
+    "code": "HLT",
+    "qty": 7,
+    "limit": 363.14,
+    "stop": 350.07,
+    "target": 389.28,
+    "atr": 8.7092,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.224,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0008",
+    "code": "WRB",
+    "qty": 32,
+    "limit": 78.66,
+    "stop": 75.67,
+    "target": 84.64,
+    "atr": 1.5509,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 0,
+    "thesis": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: S&P 500 7182.8 below its 50-day EMA 7520.7",
+     "expected_R": 0.082,
+     "score": 90
+    }
+   }
+  ],
+  "positions": [],
+  "closed": [],
+  "cancelled": [],
+  "next_id": 9
+ },
+ "benchmark": {
+  "code": "SPY",
+  "start_date": "2026-11-25",
+  "start_price": 716.7000122070312,
+  "units": 69.76419582584943
+ }
+}
