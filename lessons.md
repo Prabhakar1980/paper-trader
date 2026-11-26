@@ -67,3 +67,9 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - Market filter (rule 11) shut for a seventh day: ASX 200 closed 8692 below its 50-day EMA 8853 (8571 → 8726 → 8692; yesterday's bounce faded, gap to EMA 161 points). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. `candidates` run once only.
 - Shadows: IVV, ALL and TPG filled; MTS, TLC, RMD, BOQ, AIA cancelled on the open filter. No new shadow closes; still under 10 per category, so no conclusion.
 - IOZ line $47,561; account +$2,439 ahead by holding cash. Still not evidence of skill.
+
+## 2026-11-26
+- No closed trades; nothing to tag. No pending orders were live.
+- Market filter (rule 11) shut for an eighth day: ASX 200 closed 8764 below its 50-day EMA 8850 (8571 → 8726 → 8692 → 8764; gap to EMA narrowed to 86 points). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. `candidates` run once only.
+- Shadows: ASX filled at 11:00; QBE no fill (traded through only before 11:00); RMD, TLC, CCP, BOQ cancelled on the open filter. No new shadow closes; still under 10 per category, so no conclusion.
+- IOZ line $47,983; account +$2,017 ahead by holding cash. Still not evidence of skill.
