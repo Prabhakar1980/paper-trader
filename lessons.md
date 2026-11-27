@@ -73,3 +73,9 @@ Read this before every run. Newest at the bottom. Process errors carry a fix; ba
 - Market filter (rule 11) shut for an eighth day: ASX 200 closed 8764 below its 50-day EMA 8850 (8571 → 8726 → 8692 → 8764; gap to EMA narrowed to 86 points). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. `candidates` run once only.
 - Shadows: ASX filled at 11:00; QBE no fill (traded through only before 11:00); RMD, TLC, CCP, BOQ cancelled on the open filter. No new shadow closes; still under 10 per category, so no conclusion.
 - IOZ line $47,983; account +$2,017 ahead by holding cash. Still not evidence of skill.
+
+## 2026-11-27
+- No closed trades; nothing to tag. No pending orders were live.
+- Market filter (rule 11) shut for a ninth day, but only just: ASX 200 closed 8834 vs its 50-day EMA 8849 (8571 → 8726 → 8692 → 8764 → 8834; gap down to 15 points). No candidates reviewed, no orders placed; 8 gate-shut names went to the shadow journal. `candidates` run once only.
+- Shadows: QBE no fill (traded through only before 11:00 again); MPL, TCL, RMD, TLC, AUB, CCP, ORG, BOQ, AMC cancelled on the open filter after a gap-up; CBA shadow stop moved to breakeven. No new shadow closes; still under 10 per category, so no conclusion.
+- IOZ line $48,365; account +$1,635 ahead by holding cash (narrowing as the market recovers). If the filter reopens next week, expect pullback limits to keep getting skipped by gap-ups; that is the open filter working, not a reason to chase.

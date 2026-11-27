@@ -97,6 +97,14 @@
    "positions": 0,
    "orders": 0,
    "benchmark": 47983.1
+  },
+  {
+   "date": "2026-11-27",
+   "equity": 50000.0,
+   "cash": 50000.0,
+   "positions": 0,
+   "orders": 0,
+   "benchmark": 48364.68
   }
  ],
  "positions": [],
@@ -167,7 +175,7 @@
    "cancel_date": "2026-11-13"
   }
  ],
- "last_processed": "2026-11-26",
+ "last_processed": "2026-11-27",
  "halted": false,
  "halt_reason": null,
  "breaches": [],
@@ -185,50 +193,12 @@
     "atr": 0.4943,
     "sector": "",
     "placed": "2026-11-25",
-    "days_live": 1,
+    "days_live": 2,
     "thesis": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
     "review": {
      "category": "gate: market filter",
      "why": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
      "expected_R": 0.333,
-     "score": 90
-    }
-   },
-   {
-    "id": "S0096",
-    "code": "MPL",
-    "qty": 523,
-    "limit": 5.25,
-    "stop": 5.09,
-    "target": 5.57,
-    "atr": 0.0998,
-    "sector": "",
-    "placed": "2026-11-25",
-    "days_live": 1,
-    "thesis": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
-    "review": {
-     "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
-     "expected_R": 0.127,
-     "score": 90
-    }
-   },
-   {
-    "id": "S0099",
-    "code": "TCL",
-    "qty": 206,
-    "limit": 14.91,
-    "stop": 14.49,
-    "target": 15.75,
-    "atr": 0.275,
-    "sector": "",
-    "placed": "2026-11-25",
-    "days_live": 1,
-    "thesis": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
-    "review": {
-     "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
-     "expected_R": -0.035,
      "score": 90
     }
    },
@@ -242,7 +212,7 @@
     "atr": 1.0141,
     "sector": "",
     "placed": "2026-11-26",
-    "days_live": 0,
+    "days_live": 1,
     "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
     "review": {
      "category": "gate: market filter",
@@ -252,135 +222,154 @@
     }
    },
    {
-    "id": "S0102",
-    "code": "RMD",
-    "qty": 76,
-    "limit": 35.15,
-    "stop": 33.99,
-    "target": 37.47,
-    "atr": 0.7675,
+    "id": "S0109",
+    "code": "TCL",
+    "qty": 222,
+    "limit": 14.91,
+    "stop": 14.52,
+    "target": 15.69,
+    "atr": 0.2596,
     "sector": "",
-    "placed": "2026-11-26",
+    "placed": "2026-11-27",
     "days_live": 0,
-    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
     "review": {
      "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-     "expected_R": 0.031,
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": -0.035,
      "score": 90
     }
    },
    {
-    "id": "S0103",
-    "code": "TLC",
-    "qty": 556,
-    "limit": 5.45,
-    "stop": 5.3,
-    "target": 5.75,
-    "atr": 0.0947,
-    "sector": "",
-    "placed": "2026-11-26",
-    "days_live": 0,
-    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-    "review": {
-     "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-     "expected_R": 0.017,
-     "score": 90
-    }
-   },
-   {
-    "id": "S0104",
+    "id": "S0110",
     "code": "AUB",
-    "qty": 90,
+    "qty": 92,
     "limit": 31.15,
-    "stop": 30.18,
-    "target": 33.09,
-    "atr": 0.6439,
+    "stop": 30.2,
+    "target": 33.05,
+    "atr": 0.6286,
     "sector": "",
-    "placed": "2026-11-26",
+    "placed": "2026-11-27",
     "days_live": 0,
-    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
     "review": {
      "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-     "expected_R": 0.026,
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": 0.004,
      "score": 90
     }
    },
    {
-    "id": "S0105",
-    "code": "CCP",
-    "qty": 93,
-    "limit": 15.27,
-    "stop": 14.33,
-    "target": 17.15,
-    "atr": 0.3761,
-    "sector": "",
-    "placed": "2026-11-26",
-    "days_live": 0,
-    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-    "review": {
-     "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-     "expected_R": 0.177,
-     "score": 90
-    }
-   },
-   {
-    "id": "S0106",
+    "id": "S0111",
     "code": "ORG",
-    "qty": 269,
-    "limit": 12.29,
-    "stop": 11.97,
-    "target": 12.93,
-    "atr": 0.209,
+    "qty": 278,
+    "limit": 12.3,
+    "stop": 11.99,
+    "target": 12.92,
+    "atr": 0.2055,
     "sector": "",
-    "placed": "2026-11-26",
+    "placed": "2026-11-27",
     "days_live": 0,
-    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
     "review": {
      "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-     "expected_R": 0.094,
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": 0.081,
      "score": 90
     }
    },
    {
-    "id": "S0107",
+    "id": "S0112",
+    "code": "AMC",
+    "qty": 45,
+    "limit": 66.19,
+    "stop": 64.23,
+    "target": 70.11,
+    "atr": 1.3018,
+    "sector": "",
+    "placed": "2026-11-27",
+    "days_live": 0,
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": 0.072,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0113",
     "code": "BOQ",
     "qty": 444,
-    "limit": 6.98,
-    "stop": 6.79,
-    "target": 7.36,
-    "atr": 0.1217,
+    "limit": 6.99,
+    "stop": 6.8,
+    "target": 7.37,
+    "atr": 0.1201,
     "sector": "",
-    "placed": "2026-11-26",
+    "placed": "2026-11-27",
     "days_live": 0,
-    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
     "review": {
      "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-     "expected_R": 0.16,
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": 0.125,
      "score": 90
     }
    },
    {
-    "id": "S0108",
-    "code": "AMC",
-    "qty": 44,
-    "limit": 66.19,
-    "stop": 64.19,
-    "target": 70.19,
-    "atr": 1.3312,
+    "id": "S0114",
+    "code": "NHF",
+    "qty": 386,
+    "limit": 6.78,
+    "stop": 6.56,
+    "target": 7.22,
+    "atr": 0.1434,
     "sector": "",
-    "placed": "2026-11-26",
+    "placed": "2026-11-27",
     "days_live": 0,
-    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
     "review": {
      "category": "gate: market filter",
-     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
-     "expected_R": 0.087,
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": 0.021,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0115",
+    "code": "BWP",
+    "qty": 809,
+    "limit": 3.76,
+    "stop": 3.66,
+    "target": 3.96,
+    "atr": 0.0634,
+    "sector": "",
+    "placed": "2026-11-27",
+    "days_live": 0,
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": -0.076,
+     "score": 90
+    }
+   },
+   {
+    "id": "S0116",
+    "code": "CQR",
+    "qty": 684,
+    "limit": 3.87,
+    "stop": 3.75,
+    "target": 4.11,
+    "atr": 0.0754,
+    "sector": "",
+    "placed": "2026-11-27",
+    "days_live": 0,
+    "thesis": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8833.6 below its 50-day EMA 8848.9",
+     "expected_R": -0.016,
      "score": 90
     }
    }
@@ -407,11 +396,11 @@
     "entry_resolution": "1m",
     "init_stop": 39.41,
     "init_risk_per_share": 2.49,
-    "bars_held": 10,
+    "bars_held": 11,
     "mfe": 42.95500183105469,
     "mae": 41.400001525878906,
     "be_moved": false,
-    "last_close": 41.810001373291016
+    "last_close": 41.72999954223633
    },
    {
     "id": "S0033",
@@ -434,11 +423,11 @@
     "entry_resolution": "1m",
     "init_stop": 45.5,
     "init_risk_per_share": 2.38,
-    "bars_held": 7,
+    "bars_held": 8,
     "mfe": 48.060001373291016,
     "mae": 45.91999816894531,
     "be_moved": false,
-    "last_close": 46.75
+    "last_close": 46.56999969482422
    },
    {
     "id": "S0039",
@@ -461,11 +450,11 @@
     "entry_resolution": "1m",
     "init_stop": 19.1,
     "init_risk_per_share": 1.42,
-    "bars_held": 7,
+    "bars_held": 8,
     "mfe": 21.1200008392334,
     "mae": 20.3700008392334,
     "be_moved": false,
-    "last_close": 20.649999618530273
+    "last_close": 20.579999923706055
    },
    {
     "id": "S0061",
@@ -488,17 +477,17 @@
     "entry_resolution": "1m",
     "init_stop": 44.52,
     "init_risk_per_share": 1.09,
-    "bars_held": 4,
+    "bars_held": 5,
     "mfe": 47.5,
     "mae": 45.400001525878906,
     "be_moved": true,
-    "last_close": 46.310001373291016
+    "last_close": 46.220001220703125
    },
    {
     "id": "S0053",
     "code": "CBA",
     "qty": 17,
-    "stop": 163.13,
+    "stop": 166.98,
     "target": 178.7,
     "atr": 3.4535,
     "sector": "",
@@ -515,11 +504,11 @@
     "entry_resolution": "1m",
     "init_stop": 163.13,
     "init_risk_per_share": 3.195,
-    "bars_held": 3,
-    "mfe": 171.0399932861328,
+    "bars_held": 4,
+    "mfe": 171.24000549316406,
     "mae": 166.14999389648438,
-    "be_moved": false,
-    "last_close": 169.99000549316406
+    "be_moved": true,
+    "last_close": 169.2899932861328
    },
    {
     "id": "S0057",
@@ -542,11 +531,11 @@
     "entry_resolution": "1m",
     "init_stop": 2.8,
     "init_risk_per_share": 0.08,
-    "bars_held": 3,
-    "mfe": 2.944999933242798,
+    "bars_held": 4,
+    "mfe": 2.950000047683716,
     "mae": 2.859999895095825,
     "be_moved": false,
-    "last_close": 2.940000057220459
+    "last_close": 2.880000114440918
    },
    {
     "id": "S0067",
@@ -569,11 +558,11 @@
     "entry_resolution": "1m",
     "init_stop": 4.92,
     "init_risk_per_share": 0.185,
-    "bars_held": 3,
-    "mfe": 5.199999809265137,
+    "bars_held": 4,
+    "mfe": 5.230000019073486,
     "mae": 5.090000152587891,
     "be_moved": false,
-    "last_close": 5.179999828338623
+    "last_close": 5.199999809265137
    },
    {
     "id": "S0070",
@@ -596,11 +585,11 @@
     "entry_resolution": "1m",
     "init_stop": 4.8,
     "init_risk_per_share": 0.175,
-    "bars_held": 3,
-    "mfe": 5.110000133514404,
+    "bars_held": 4,
+    "mfe": 5.130000114440918,
     "mae": 4.925000190734863,
     "be_moved": false,
-    "last_close": 5.090000152587891
+    "last_close": 5.050000190734863
    },
    {
     "id": "S0078",
@@ -623,11 +612,11 @@
     "entry_resolution": "1m",
     "init_stop": 10.96,
     "init_risk_per_share": 0.28,
-    "bars_held": 2,
+    "bars_held": 3,
     "mfe": 11.420000076293945,
-    "mae": 11.170000076293945,
+    "mae": 11.130000114440918,
     "be_moved": false,
-    "last_close": 11.270000457763672
+    "last_close": 11.15999984741211
    },
    {
     "id": "S0085",
@@ -650,11 +639,11 @@
     "entry_resolution": "1m",
     "init_stop": 71.12,
     "init_risk_per_share": 0.97,
-    "bars_held": 1,
-    "mfe": 72.55999755859375,
+    "bars_held": 2,
+    "mfe": 73.0999984741211,
     "mae": 71.73999786376953,
     "be_moved": false,
-    "last_close": 72.5199966430664
+    "last_close": 73.05000305175781
    },
    {
     "id": "S0090",
@@ -677,11 +666,11 @@
     "entry_resolution": "1m",
     "init_stop": 62.35,
     "init_risk_per_share": 2.22,
-    "bars_held": 1,
+    "bars_held": 2,
     "mfe": 66.0,
     "mae": 64.31999969482422,
     "be_moved": false,
-    "last_close": 65.30000305175781
+    "last_close": 65.33999633789062
    },
    {
     "id": "S0091",
@@ -704,11 +693,11 @@
     "entry_resolution": "1m",
     "init_stop": 3.83,
     "init_risk_per_share": 0.13,
-    "bars_held": 1,
-    "mfe": 3.990000009536743,
+    "bars_held": 2,
+    "mfe": 4.0,
     "mae": 3.9100000858306885,
     "be_moved": false,
-    "last_close": 3.940000057220459
+    "last_close": 3.950000047683716
    },
    {
     "id": "S0093",
@@ -731,10 +720,11 @@
     "entry_resolution": "1m",
     "init_stop": 64.54,
     "init_risk_per_share": 2.715,
-    "bars_held": 0,
-    "mfe": 67.74500274658203,
-    "mae": 67.05999755859375,
-    "be_moved": false
+    "bars_held": 1,
+    "mfe": 67.80999755859375,
+    "mae": 66.61499786376953,
+    "be_moved": false,
+    "last_close": 67.01000213623047
    }
   ],
   "closed": [
@@ -2553,9 +2543,198 @@
     },
     "cancel_reason": "opened 7.050, more than 0.5 ATR above the limit",
     "cancel_date": "2026-11-26"
+   },
+   {
+    "id": "S0096",
+    "code": "MPL",
+    "qty": 523,
+    "limit": 5.25,
+    "stop": 5.09,
+    "target": 5.57,
+    "atr": 0.0998,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 2,
+    "thesis": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
+     "expected_R": 0.127,
+     "score": 90
+    },
+    "cancel_reason": "opened 5.330, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0099",
+    "code": "TCL",
+    "qty": 206,
+    "limit": 14.91,
+    "stop": 14.49,
+    "target": 15.75,
+    "atr": 0.275,
+    "sector": "",
+    "placed": "2026-11-25",
+    "days_live": 2,
+    "thesis": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8692.4 below its 50-day EMA 8853.0",
+     "expected_R": -0.035,
+     "score": 90
+    },
+    "cancel_reason": "opened 15.170, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0102",
+    "code": "RMD",
+    "qty": 76,
+    "limit": 35.15,
+    "stop": 33.99,
+    "target": 37.47,
+    "atr": 0.7675,
+    "sector": "",
+    "placed": "2026-11-26",
+    "days_live": 1,
+    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+     "expected_R": 0.031,
+     "score": 90
+    },
+    "cancel_reason": "opened 36.150, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0103",
+    "code": "TLC",
+    "qty": 556,
+    "limit": 5.45,
+    "stop": 5.3,
+    "target": 5.75,
+    "atr": 0.0947,
+    "sector": "",
+    "placed": "2026-11-26",
+    "days_live": 1,
+    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+     "expected_R": 0.017,
+     "score": 90
+    },
+    "cancel_reason": "opened 5.570, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0104",
+    "code": "AUB",
+    "qty": 90,
+    "limit": 31.15,
+    "stop": 30.18,
+    "target": 33.09,
+    "atr": 0.6439,
+    "sector": "",
+    "placed": "2026-11-26",
+    "days_live": 1,
+    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+     "expected_R": 0.026,
+     "score": 90
+    },
+    "cancel_reason": "opened 31.940, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0105",
+    "code": "CCP",
+    "qty": 93,
+    "limit": 15.27,
+    "stop": 14.33,
+    "target": 17.15,
+    "atr": 0.3761,
+    "sector": "",
+    "placed": "2026-11-26",
+    "days_live": 1,
+    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+     "expected_R": 0.177,
+     "score": 90
+    },
+    "cancel_reason": "opened 15.610, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0106",
+    "code": "ORG",
+    "qty": 269,
+    "limit": 12.29,
+    "stop": 11.97,
+    "target": 12.93,
+    "atr": 0.209,
+    "sector": "",
+    "placed": "2026-11-26",
+    "days_live": 1,
+    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+     "expected_R": 0.094,
+     "score": 90
+    },
+    "cancel_reason": "opened 12.450, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0107",
+    "code": "BOQ",
+    "qty": 444,
+    "limit": 6.98,
+    "stop": 6.79,
+    "target": 7.36,
+    "atr": 0.1217,
+    "sector": "",
+    "placed": "2026-11-26",
+    "days_live": 1,
+    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+     "expected_R": 0.16,
+     "score": 90
+    },
+    "cancel_reason": "opened 7.090, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
+   },
+   {
+    "id": "S0108",
+    "code": "AMC",
+    "qty": 44,
+    "limit": 66.19,
+    "stop": 64.19,
+    "target": 70.19,
+    "atr": 1.3312,
+    "sector": "",
+    "placed": "2026-11-26",
+    "days_live": 1,
+    "thesis": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+    "review": {
+     "category": "gate: market filter",
+     "why": "gate: market filter: ASX 200 8763.8 below its 50-day EMA 8849.5",
+     "expected_R": 0.087,
+     "score": 90
+    },
+    "cancel_reason": "opened 67.550, more than 0.5 ATR above the limit",
+    "cancel_date": "2026-11-27"
    }
   ],
-  "next_id": 109
+  "next_id": 117
  },
  "benchmark": {
   "code": "IOZ",
